@@ -1,1 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ORION — Acceso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08090a;--card:#0f1114;--border:#1e2329;
+  --accent:#e8ff47;--accent2:#47c5ff;--accent3:#ff6b47;
+  --text:#f0f2f5;--muted:#5a6270;
+  --font:'Syne',sans-serif;--mono:'Space Mono',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden}
+
+/* Grid bg */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#1e232910 1px,transparent 1px),linear-gradient(90deg,#1e232910 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+
+/* Glow orbs */
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;animation:drift 12s ease-in-out infinite}
+.orb1{width:600px;height:600px;background:rgba(232,255,71,.04);top:-200px;left:-200px;animation-delay:0s}
+.orb2{width:400px;height:400px;background:rgba(71,197,255,.04);bottom:-100px;right:-100px;animation-delay:-6s}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+
+/* Center layout */
+.wrap{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+
+/* Logo bar */
+.logo-bar{display:flex;align-items:center;gap:12px;margin-bottom:64px}
+.logo-mark{width:40px;height:40px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent)}
+.logo-text{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:.3em;text-transform:uppercase}
+
+/* Card */
+.card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--border);padding:48px 40px;position:relative;overflow:hidden}
+.card::before{content:'◈';position:absolute;font-size:200px;font-weight:800;color:var(--accent);opacity:.03;right:-40px;bottom:-60px;pointer-events:none;line-height:1;font-family:var(--font)}
+
+.eyebrow{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.3em;text-transform:uppercase;margin-bottom:16px}
+.title{font-size:36px;font-weight:800;line-height:1;margin-bottom:6px}
+.sub{font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:40px}
+
+.field{margin-bottom:20px}
+.field label{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.field input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:14px 16px;font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--accent)}
+.field input::placeholder{color:#3a404a}
+
+.btn{width:100%;background:var(--accent);color:#000;border:none;padding:16px;font-family:var(--font);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn .spinner{width:14px;height:14px;border:2px solid transparent;border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.err{font-family:var(--mono);font-size:11px;color:var(--accent3);margin-top:14px;display:none;padding:10px 14px;border:1px solid rgba(255,107,71,.3);background:rgba(255,107,71,.05)}
+
+/* Status de Firebase */
+.fb-status{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em;display:flex;align-items:center;gap:8px}
+.fb-dot{width:5px;height:5px;border-radius:50%;background:var(--muted)}
+.fb-dot.ok{background:var(--accent);animation:pulse 2s infinite}
+.fb-dot.err{background:var(--accent3)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Setup banner */
+.setup-banner{width:100%;max-width:400px;margin-top:20px;background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);padding:16px 20px;display:none}
+.setup-banner p{font-family:var(--mono);font-size:10px;color:var(--accent);line-height:1.7}
+.setup-banner a{color:var(--accent);text-decoration:underline;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="wrap">
+  <div class="logo-bar">
+    <div class="logo-mark">◈</div>
+    <div class="logo-text">Sistema de gestión · v1.0</div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">// acceso restringido</div>
+    <h1 class="title">ORION<br>Super Panel</h1>
+    <p class="sub">Plataforma de gestión de instalaciones educativas</p>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="inp-email" placeholder="admin@tudominio.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+
+    <button class="btn" id="btn-login" onclick="doLogin()">
+      <span class="spinner" id="spin"></span>
+      <span id="btn-label">ACCEDER →</span>
+    </button>
+    <div class="err" id="err-msg"></div>
+  </div>
+
+  <div class="setup-banner" id="setup-banner">
+    <p>⚠️ Firebase no configurado.<br>
+    Editá index.html y super-panel.html con tu config de Firebase.<br>
+    <a onclick="document.getElementById('setup-banner').style.display='none'">Entendido</a></p>
+  </div>
+</div>
+
+<div class="fb-status">
+  <div class="fb-dot" id="fb-dot"></div>
+  <span id="fb-label">Conectando...</span>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script>
+// ══════════════════════════════════════
+// 🔧 CONFIGURACIÓN — reemplazá con tus credenciales de Firebase
+// ══════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:            "TU_API_KEY",
+  authDomain:        "TU_PROJECT.firebaseapp.com",
+  projectId:         "TU_PROJECT_ID",
+  storageBucket:     "TU_PROJECT.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId:             "TU_APP_ID"
+};
+
+// Email del administrador principal (vos)
+const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
+// ══════════════════════════════════════
+
+let db, auth;
+
+try {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db   = firebase.firestore();
+  auth = firebase.auth();
+
+  if (FIREBASE_CONFIG.apiKey === 'TU_API_KEY') {
+    document.getElementById('fb-dot').className   = 'fb-dot err';
+    document.getElementById('fb-label').textContent = 'Firebase sin configurar';
+    document.getElementById('setup-banner').style.display = 'block';
+  } else {
+    // Verificar conexión real
+    db.collection('_ping').doc('check').set({ ts: Date.now() }).then(() => {
+      document.getElementById('fb-dot').className   = 'fb-dot ok';
+      document.getElementById('fb-label').textContent = 'Firebase conectado';
+    }).catch(() => {
+      document.getElementById('fb-dot').className   = 'fb-dot err';
+      document.getElementById('fb-label').textContent = 'Error de conexión';
+    });
+  }
+} catch(e) {
+  document.getElementById('fb-dot').className   = 'fb-dot err';
+  document.getElementById('fb-label').textContent = 'Error de inicialización';
+}
+
+// Sesión activa → ir directo al panel
+firebase.auth().onAuthStateChanged(user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    window.location.href = 'super-panel.html';
+  }
+});
+
+async function doLogin() {
+  const email = document.getElementById('inp-email').value.trim();
+  const pass  = document.getElementById('inp-pass').value.trim();
+  const errEl = document.getElementById('err-msg');
+  errEl.style.display = 'none';
+
+  if (!email || !pass) { showErr('Completá email y contraseña.'); return; }
+  if (email !== ADMIN_EMAIL) { showErr('Email no autorizado.'); return; }
+
+  setLoading(true);
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, pass);
+    // onAuthStateChanged se encarga del redirect
+  } catch(e) {
+    const msgs = {
+      'auth/wrong-password':    'Contraseña incorrecta.',
+      'auth/user-not-found':    'Usuario no encontrado.',
+      'auth/invalid-email':     'Email inválido.',
+      'auth/too-many-requests': 'Demasiados intentos. Esperá unos minutos.',
+      'auth/network-request-failed': 'Sin conexión a internet.',
+    };
+    showErr(msgs[e.code] || 'Error: ' + e.message);
+  }
+  setLoading(false);
+}
+
+function showErr(msg) {
+  const el = document.getElementById('err-msg');
+  el.textContent = msg; el.style.display = 'block';
+}
+function setLoading(on) {
+  document.getElementById('spin').style.display  = on ? 'block' : 'none';
+  document.getElementById('btn-label').textContent = on ? 'Verificando...' : 'ACCEDER →';
+  document.getElementById('btn-login').disabled  = on;
+}
+</script>
+</body>
+</html>
 
