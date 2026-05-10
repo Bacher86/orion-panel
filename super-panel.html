@@ -403,31 +403,31 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script>
-// ══════════════════════════════════════
-// 🔧 CONFIGURACIÓN — misma que index.html
-// ══════════════════════════════════════
-const FIREBASE_CONFIG = {
-  apiKey:            "TU_API_KEY",
-  authDomain:        "TU_PROJECT.firebaseapp.com",
-  projectId:         "TU_PROJECT_ID",
-  storageBucket:     "TU_PROJECT.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId:             "TU_APP_ID"
+<script type="module">
+import { initializeApp }                                      from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, collection, doc,
+         addDoc, setDoc, updateDoc, deleteDoc,
+         getDoc, getDocs, orderBy, query,
+         limit, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut }               from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+// ── Config ORION ──
+const firebaseConfig = {
+  apiKey:            "AIzaSyAnt0izxpGlF_uc47lEgwYaPQSDH4EkEAE",
+  authDomain:        "orion-panel-59dab.firebaseapp.com",
+  projectId:         "orion-panel-59dab",
+  storageBucket:     "orion-panel-59dab.firebasestorage.app",
+  messagingSenderId: "322169536252",
+  appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
-const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
-// ══════════════════════════════════════
+const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email
 
-firebase.initializeApp(FIREBASE_CONFIG);
-const db   = firebase.firestore();
-const auth = firebase.auth();
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-// ── Auth guard: si no hay sesión, volver al index ──
-auth.onAuthStateChanged(async user => {
+// ── Auth guard ──
+onAuthStateChanged(auth, async user => {
   if (!user || user.email !== ADMIN_EMAIL) {
     window.location.href = 'index.html'; return;
   }
@@ -438,49 +438,52 @@ auth.onAuthStateChanged(async user => {
 });
 
 // ══════════════════════════════════════
-// DB HELPERS — Firestore
+// DB HELPERS — Firestore modular
 // ══════════════════════════════════════
-const COL_ESC  = 'orion_escuelas';
-const COL_LOG  = 'orion_logs';
-const COL_CFG  = 'orion_config';
+const COL_ESC = 'orion_escuelas';
+const COL_LOG = 'orion_logs';
+const COL_CFG = 'orion_config';
 
 async function dbGetEscuelas() {
-  const snap = await db.collection(COL_ESC).orderBy('creadoEn','desc').get();
+  const q    = query(collection(db, COL_ESC), orderBy('creadoEn','desc'));
+  const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 async function dbAddEscuela(data) {
-  data.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
-  const ref = await db.collection(COL_ESC).add(data);
+  data.creadoEn = serverTimestamp();
+  const ref = await addDoc(collection(db, COL_ESC), data);
   return ref.id;
 }
 async function dbUpdateEscuela(id, data) {
-  await db.collection(COL_ESC).doc(id).update(data);
+  await updateDoc(doc(db, COL_ESC, id), data);
 }
 async function dbDeleteEscuela(id) {
-  await db.collection(COL_ESC).doc(id).delete();
+  await deleteDoc(doc(db, COL_ESC, id));
 }
 async function dbGetLogs() {
-  const snap = await db.collection(COL_LOG).orderBy('fecha','desc').limit(100).get();
+  const q    = query(collection(db, COL_LOG), orderBy('fecha','desc'), limit(100));
+  const snap = await getDocs(q);
   return snap.docs.map(d => d.data());
 }
 async function dbAddLog(msg, tipo='info', escuela='') {
-  await db.collection(COL_LOG).add({ msg, tipo, escuela, fecha: firebase.firestore.FieldValue.serverTimestamp() });
+  await addDoc(collection(db, COL_LOG), { msg, tipo, escuela, fecha: serverTimestamp() });
 }
 async function dbGetConfig() {
-  const doc = await db.collection(COL_CFG).doc('principal').get();
-  return doc.exists ? doc.data() : {};
+  const snap = await getDoc(doc(db, COL_CFG, 'principal'));
+  return snap.exists() ? snap.data() : {};
 }
 async function dbSetConfig(data) {
-  await db.collection(COL_CFG).doc('principal').set(data, { merge: true });
+  await setDoc(doc(db, COL_CFG, 'principal'), data, { merge: true });
 }
 
 // ══════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════
 async function doLogout() {
-  await auth.signOut();
+  await signOut(auth);
   window.location.href = 'index.html';
 }
+window.doLogout = doLogout;
 
 // ══════════════════════════════════════
 // INIT
@@ -617,7 +620,7 @@ async function confirmarRenovacion() {
   const nota     = document.getElementById('modal-ren-nota').value;
   await dbUpdateEscuela(renovandoId, {
     licFin: nuevaFin,
-    renovaciones: firebase.firestore.FieldValue.arrayUnion({ fecha: new Date().toISOString(), nuevaFin, nota })
+    renovaciones: arrayUnion({ fecha: new Date().toISOString(), nuevaFin, nota })
   });
   await dbAddLog(`Licencia renovada hasta ${nuevaFin}`, 'success');
   document.getElementById('modal-renovar').classList.remove('open');
@@ -808,6 +811,16 @@ function toast(msg,tipo='info'){
   t.textContent=msg;t.className='toast show'+(tipo==='success'?' success':tipo==='error'?' error':'');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);
 }
+
+// Exponer funciones al scope global para los onclick del HTML
+window.goTo             = goTo;
+window.deployEscuela    = deployEscuela;
+window.limpiarFormulario= limpiarFormulario;
+window.eliminarEscuela  = eliminarEscuela;
+window.abrirRenovar     = abrirRenovar;
+window.confirmarRenovacion = confirmarRenovacion;
+window.guardarConfigGH  = guardarConfigGH;
+window.exportarDatos    = exportarDatos;
 </script>
 </body>
 </html>
