@@ -299,6 +299,10 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
             <span class="spinner" id="deploy-spinner"></span>
             <span id="deploy-label">⚡ GENERAR Y DEPLOYAR</span>
           </button>
+          <button class="btn-secondary" onclick="registrarSinDeploy()" id="btn-registrar" style="border-color:#47c5ff;color:#47c5ff">
+            <span class="spinner" id="reg-spinner"></span>
+            <span id="reg-label">📋 SOLO REGISTRAR</span>
+          </button>
           <button class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
           <span id="deploy-status" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:8px"></span>
         </div>
@@ -420,7 +424,7 @@ const firebaseConfig = {
   messagingSenderId: "322169536252",
   appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
-const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email
+const ADMIN_EMAIL = "TU_EMAIL@gmail.com"; // ← reemplazá con tu email
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
@@ -677,7 +681,36 @@ async function exportarDatos() {
 // ══════════════════════════════════════
 // DEPLOY — GitHub API
 // ══════════════════════════════════════
-async function deployEscuela() {
+async function registrarSinDeploy() {
+  const nombre=v('n-nombre'),iosi=v('n-iosi'),adminEmail=v('n-admin-email');
+  const logo=v('n-logo'),emoji=v('n-emoji')||'🏫';
+  const color1=v('n-color1-hex'),color2=v('n-color2-hex'),color3=v('n-color3-hex');
+  const fbKey=v('fb-key'),fbProject=v('fb-project');
+  const licInicio=v('n-lic-inicio'),licFin=v('n-lic-fin'),plan=v('n-plan'),precio=v('n-precio'),notas=v('n-notas');
+  const ghUser=v('n-gh-user'),newRepo=v('n-gh-repo');
+  if(!nombre){toast('Falta el nombre de la escuela.','error');return;}
+  if(!iosi){toast('Falta el nombre del asistente IA.','error');return;}
+  document.getElementById('reg-spinner').style.display='block';
+  document.getElementById('reg-label').textContent='Guardando...';
+  document.getElementById('btn-registrar').disabled=true;
+  try{
+    const appUrl = ghUser&&newRepo ? `https://${ghUser}.github.io/${newRepo}` : v('n-logo')||'';
+    const repoUrl= ghUser&&newRepo ? `https://github.com/${ghUser}/${newRepo}` : '';
+    await dbAddEscuela({nombre,iosi,adminEmail,logo,emoji,color1,color2,color3,
+      repoUser:ghUser,repoNombre:newRepo,plan,precio,licInicio,licFin,notas,
+      url: ghUser&&newRepo?`https://${ghUser}.github.io/${newRepo}`:'',
+      repoUrl,registradoSinDeploy:true});
+    await dbAddLog(`Escuela registrada manualmente: ${nombre}`,'success',nombre);
+    toast(`✓ ${nombre} registrada en el panel`,'success');
+    limpiarFormulario();
+    goTo('escuelas');
+  }catch(e){
+    toast('Error al guardar: '+e.message,'error');
+  }
+  document.getElementById('reg-spinner').style.display='none';
+  document.getElementById('reg-label').textContent='📋 SOLO REGISTRAR';
+  document.getElementById('btn-registrar').disabled=false;
+}
   const ghToken=v('n-gh-token'),ghUser=v('n-gh-user'),templateRepo=v('n-gh-template-repo'),newRepo=v('n-gh-repo');
   const nombre=v('n-nombre'),iosi=v('n-iosi'),adminEmail=v('n-admin-email'),adminPass=v('n-admin-pass');
   const logo=v('n-logo'),emoji=v('n-emoji')||'🏫';
@@ -813,6 +846,7 @@ function toast(msg,tipo='info'){
 }
 
 // Exponer funciones al scope global para los onclick del HTML
+window.registrarSinDeploy = registrarSinDeploy;
 window.goTo             = goTo;
 window.deployEscuela    = deployEscuela;
 window.limpiarFormulario= limpiarFormulario;
