@@ -15,35 +15,26 @@
   --font-head:'Syne',sans-serif;--font-mono:'Space Mono',monospace;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-head);overflow-x:hidden}
-
-/* ─── NOISE OVERLAY ─── */
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.6}
-
-/* ─── GRID BACKGROUND ─── */
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;opacity:.4}
 
-/* ─── LOGIN ─── */
-#login-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.login-box{width:100%;max-width:380px;padding:48px 40px;border:1px solid var(--border);background:var(--card);position:relative;overflow:hidden}
-.login-box::before{content:'ORION';position:absolute;top:-20px;right:-10px;font-size:120px;font-weight:800;color:var(--accent);opacity:.04;pointer-events:none;line-height:1}
-.login-logo{font-size:11px;font-family:var(--font-mono);color:var(--accent);letter-spacing:.3em;text-transform:uppercase;margin-bottom:32px}
-.login-title{font-size:32px;font-weight:800;line-height:1;margin-bottom:8px}
-.login-sub{font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-bottom:40px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:9px;font-family:var(--font-mono);color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-.field input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:14px 16px;font-family:var(--font-mono);font-size:13px;outline:none;transition:border .2s}
-.field input:focus{border-color:var(--accent)}
-.btn-login{width:100%;background:var(--accent);color:#000;border:none;padding:16px;font-family:var(--font-head);font-weight:800;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:opacity .2s;margin-top:8px}
-.btn-login:hover{opacity:.85}
-.login-err{font-family:var(--font-mono);font-size:11px;color:var(--accent3);margin-top:12px;display:none}
-
 /* ─── APP SHELL ─── */
-#app{display:none;height:100vh;flex-direction:column}
+#app{display:flex;height:100vh;flex-direction:column}
 header{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;border-bottom:1px solid var(--border);position:relative;z-index:10;background:var(--bg)}
 .header-logo{font-size:11px;font-family:var(--font-mono);color:var(--accent);letter-spacing:.3em}
-.header-status{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;color:var(--muted)}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.header-right{display:flex;align-items:center;gap:20px}
+.header-user{font-family:var(--font-mono);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.btn-logout{font-family:var(--font-mono);font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:.2em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--border);transition:all .15s}
+.btn-logout:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* ─── LOADING SCREEN ─── */
+#loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.load-logo{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.3em}
+.load-bar{width:200px;height:2px;background:var(--border);overflow:hidden}
+.load-fill{height:100%;background:var(--accent);animation:load 1.5s ease-in-out infinite}
+@keyframes load{0%{width:0;margin-left:0}50%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
 
 /* ─── LAYOUT ─── */
 .shell{display:flex;flex:1;overflow:hidden}
@@ -59,8 +50,7 @@ nav .spacer{flex:1}
 main{flex:1;overflow-y:auto;padding:40px}
 
 /* ─── SECTIONS ─── */
-.section{display:none}
-.section.active{display:block}
+.section{display:none}.section.active{display:block}
 
 /* ─── PAGE HEADER ─── */
 .page-header{margin-bottom:40px}
@@ -68,16 +58,14 @@ main{flex:1;overflow-y:auto;padding:40px}
 .page-title{font-size:36px;font-weight:800;line-height:1}
 .page-sub{font-size:13px;color:var(--muted);margin-top:8px}
 
-/* ─── STATS ROW ─── */
+/* ─── STATS ─── */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
 .stat-box{background:var(--card);border:1px solid var(--border);padding:24px;position:relative;overflow:hidden}
 .stat-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
 .stat-box:hover::after{transform:scaleX(1)}
 .stat-n{font-size:40px;font-weight:800;line-height:1;margin-bottom:4px}
 .stat-l{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
-.stat-accent{color:var(--accent)}
-.stat-accent2{color:var(--accent2)}
-.stat-accent3{color:var(--accent3)}
+.stat-accent{color:var(--accent)}.stat-accent2{color:var(--accent2)}.stat-accent3{color:var(--accent3)}
 
 /* ─── TABLE ─── */
 .table-wrap{background:var(--card);border:1px solid var(--border);overflow:hidden;margin-bottom:32px}
@@ -116,7 +104,6 @@ select.form-input{cursor:pointer}
 .form-hint{font-family:var(--font-mono);font-size:9px;color:var(--muted2)}
 .form-section{font-family:var(--font-mono);font-size:9px;letter-spacing:.3em;color:var(--accent);text-transform:uppercase;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .color-row{display:flex;gap:12px;align-items:center}
-.color-preview{width:36px;height:36px;border:1px solid var(--border);flex-shrink:0}
 input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border);background:var(--bg);cursor:pointer}
 
 /* ─── BUTTONS ─── */
@@ -155,7 +142,7 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 
 /* ─── LOG ─── */
 .log-entry{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start}
-.log-time{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;margin-top:2px;min-width:120px}
+.log-time{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;margin-top:2px;min-width:130px}
 .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
 .log-msg{font-size:12px;line-height:1.5}
 .log-tag{font-family:var(--font-mono);font-size:9px;padding:2px 8px;border:1px solid var(--border);margin-left:8px;color:var(--muted)}
@@ -167,43 +154,35 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 .toast.error{border-color:rgba(255,107,71,.4);color:var(--accent3)}
 
 /* ─── SPINNER ─── */
-.spinner{width:16px;height:16px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:none}
+.spinner{width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ─── MODAL ─── */
-.modal-overlay{position:fixed;inset:0;background:rgba(8,9,10,.9);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(8,9,10,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--card);border:1px solid var(--border);padding:36px;width:100%;max-width:480px}
 .modal-title{font-size:20px;font-weight:800;margin-bottom:8px}
 .modal-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:28px}
 .modal-actions{display:flex;gap:12px;margin-top:24px}
 
-/* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border)}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">◈ ORION SYSTEM</div>
-    <h1 class="login-title">Super<br>Panel</h1>
-    <p class="login-sub">// acceso restringido — solo administrador</p>
-    <div class="field"><label>Usuario</label><input type="text" id="l-user" placeholder="admin" autocomplete="off"></div>
-    <div class="field"><label>Contraseña maestra</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"></div>
-    <button class="btn-login" onclick="login()">ACCEDER →</button>
-    <div class="login-err" id="l-err">Credenciales incorrectas.</div>
-  </div>
+<!-- ── LOADING ── -->
+<div id="loading-screen">
+  <div class="load-logo">◈ ORION — cargando</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
 </div>
 
-<!-- ══ APP ══ -->
-<div id="app">
+<!-- ── APP ── -->
+<div id="app" style="display:none">
   <header>
     <div class="header-logo">◈ ORION SYSTEM</div>
-    <div style="display:flex;align-items:center;gap:24px">
-      <div class="header-status"><div class="dot"></div>Sistema operativo</div>
-      <button onclick="logout()" style="font-family:var(--font-mono);font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:.2em;text-transform:uppercase">SALIR</button>
+    <div class="header-right">
+      <div class="header-user"><div class="dot-live"></div><span id="hdr-email">—</span></div>
+      <button class="btn-logout" onclick="doLogout()">SALIR</button>
     </div>
   </header>
   <div class="shell">
@@ -230,27 +209,25 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           <p class="page-sub">Estado general de todas las instalaciones activas.</p>
         </div>
         <div class="stats-row">
-          <div class="stat-box"><div class="stat-n stat-accent" id="d-total">0</div><div class="stat-l">Escuelas totales</div></div>
-          <div class="stat-box"><div class="stat-n stat-accent2" id="d-activas">0</div><div class="stat-l">Activas</div></div>
-          <div class="stat-box"><div class="stat-n stat-accent3" id="d-por-vencer">0</div><div class="stat-l">Por vencer (30d)</div></div>
-          <div class="stat-box"><div class="stat-n" id="d-vencidas">0</div><div class="stat-l">Vencidas</div></div>
+          <div class="stat-box"><div class="stat-n stat-accent" id="d-total">—</div><div class="stat-l">Escuelas totales</div></div>
+          <div class="stat-box"><div class="stat-n stat-accent2" id="d-activas">—</div><div class="stat-l">Activas</div></div>
+          <div class="stat-box"><div class="stat-n stat-accent3" id="d-por-vencer">—</div><div class="stat-l">Por vencer (30d)</div></div>
+          <div class="stat-box"><div class="stat-n" id="d-vencidas">—</div><div class="stat-l">Vencidas</div></div>
         </div>
-
         <div class="table-wrap">
           <div class="table-head">
             <span class="table-title">Instalaciones recientes</span>
             <button class="action-btn" onclick="goTo('nueva')">+ Nueva</button>
           </div>
           <table>
-            <thead><tr><th>Escuela</th><th>Asistente IA</th><th>Deploy</th><th>Licencia</th><th>Estado</th></tr></thead>
-            <tbody id="d-table-body"><tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr></tbody>
+            <thead><tr><th>Escuela</th><th>Asistente IA</th><th>URL</th><th>Licencia</th><th>Estado</th></tr></thead>
+            <tbody id="d-table-body"><tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody>
           </table>
         </div>
-
         <div class="card">
           <div class="card-title">Actividad reciente</div>
           <div class="card-sub">Últimas acciones del sistema</div>
-          <div id="d-log-reciente" style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin actividad registrada.</div>
+          <div id="d-log-reciente" style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Cargando...</div>
         </div>
       </section>
 
@@ -259,154 +236,61 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         <div class="page-header">
           <div class="page-eyebrow">// deploy</div>
           <h1 class="page-title">Nueva escuela</h1>
-          <p class="page-sub">Completá los datos, el sistema genera y despliega la app automáticamente.</p>
+          <p class="page-sub">Completá los datos y el sistema genera la app automáticamente.</p>
         </div>
 
-        <!-- Configuración GitHub -->
         <div class="card">
           <div class="card-title">GitHub</div>
           <div class="card-sub">Token y cuenta para crear el repositorio</div>
           <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">GitHub Token (PAT)</label>
-              <input type="password" class="form-input" id="n-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-              <span class="form-hint">Necesita permisos: repo, workflow</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Usuario / Org de GitHub</label>
-              <input type="text" class="form-input" id="n-gh-user" placeholder="tu-usuario-github">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Repo origen (template)</label>
-              <input type="text" class="form-input" id="n-gh-template-repo" placeholder="IosefcaroAPP-main">
-              <span class="form-hint">El repo con el código base a clonar</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nombre del nuevo repo</label>
-              <input type="text" class="form-input" id="n-gh-repo" placeholder="app-colegio-sanmartin" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'-')">
-            </div>
+            <div class="form-group"><label class="form-label">GitHub Token (PAT)</label><input type="password" class="form-input" id="n-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"><span class="form-hint">Se guarda en Firebase, no en tu browser</span></div>
+            <div class="form-group"><label class="form-label">Usuario / Org de GitHub</label><input type="text" class="form-input" id="n-gh-user" placeholder="tu-usuario-github"></div>
+            <div class="form-group"><label class="form-label">Repo template</label><input type="text" class="form-input" id="n-gh-template-repo" placeholder="app-template"></div>
+            <div class="form-group"><label class="form-label">Nombre del nuevo repo</label><input type="text" class="form-input" id="n-gh-repo" placeholder="app-colegio-sanmartin" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'-')"></div>
           </div>
         </div>
 
-        <!-- Datos escuela -->
         <div class="card">
           <div class="card-title">Datos de la escuela</div>
-          <div class="card-sub">Información institucional que se inyecta en el código</div>
+          <div class="card-sub">Se inyectan automáticamente en el código</div>
           <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Nombre de la escuela</label>
-              <input type="text" class="form-input" id="n-nombre" placeholder="Colegio San Martín">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nombre del asistente IA</label>
-              <input type="text" class="form-input" id="n-iosi" placeholder="Milu, Beto, Sofía...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Email administrador</label>
-              <input type="email" class="form-input" id="n-admin-email" placeholder="director@escuela.edu.ar">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Contraseña admin</label>
-              <input type="text" class="form-input" id="n-admin-pass" placeholder="Contraseña123">
-            </div>
-            <div class="form-group">
-              <label class="form-label">URL logo (link directo)</label>
-              <input type="url" class="form-input" id="n-logo" placeholder="https://escuela.edu.ar/logo.png">
-              <span class="form-hint">PNG o SVG, fondo transparente ideal</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Emoji icono (alternativa)</label>
-              <input type="text" class="form-input" id="n-emoji" placeholder="🏫" maxlength="4">
-            </div>
+            <div class="form-group"><label class="form-label">Nombre de la escuela</label><input type="text" class="form-input" id="n-nombre" placeholder="Colegio San Martín"></div>
+            <div class="form-group"><label class="form-label">Nombre del asistente IA</label><input type="text" class="form-input" id="n-iosi" placeholder="Milu, Beto, Sofía..."></div>
+            <div class="form-group"><label class="form-label">Email administrador</label><input type="email" class="form-input" id="n-admin-email" placeholder="director@escuela.edu.ar"></div>
+            <div class="form-group"><label class="form-label">Contraseña admin</label><input type="text" class="form-input" id="n-admin-pass" placeholder="Contraseña123"></div>
+            <div class="form-group"><label class="form-label">URL logo</label><input type="url" class="form-input" id="n-logo" placeholder="https://escuela.edu.ar/logo.png"></div>
+            <div class="form-group"><label class="form-label">Emoji icono</label><input type="text" class="form-input" id="n-emoji" placeholder="🏫" maxlength="4"></div>
           </div>
-
           <div class="form-section">Colores institucionales</div>
           <div class="form-grid col3">
-            <div class="form-group">
-              <label class="form-label">Color primario</label>
-              <div class="color-row">
-                <input type="color" id="n-color1" value="#6c47ff">
-                <input type="text" class="form-input" id="n-color1-hex" value="#6c47ff" style="flex:1" oninput="document.getElementById('n-color1').value=this.value">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Color secundario</label>
-              <div class="color-row">
-                <input type="color" id="n-color2" value="#a855f7">
-                <input type="text" class="form-input" id="n-color2-hex" value="#a855f7" style="flex:1" oninput="document.getElementById('n-color2').value=this.value">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Color acento</label>
-              <div class="color-row">
-                <input type="color" id="n-color3" value="#f59e0b">
-                <input type="text" class="form-input" id="n-color3-hex" value="#f59e0b" style="flex:1" oninput="document.getElementById('n-color3').value=this.value">
-              </div>
-            </div>
+            <div class="form-group"><label class="form-label">Color primario</label><div class="color-row"><input type="color" id="n-color1" value="#6c47ff"><input type="text" class="form-input" id="n-color1-hex" value="#6c47ff" style="flex:1" oninput="document.getElementById('n-color1').value=this.value"></div></div>
+            <div class="form-group"><label class="form-label">Color secundario</label><div class="color-row"><input type="color" id="n-color2" value="#a855f7"><input type="text" class="form-input" id="n-color2-hex" value="#a855f7" style="flex:1" oninput="document.getElementById('n-color2').value=this.value"></div></div>
+            <div class="form-group"><label class="form-label">Color acento</label><div class="color-row"><input type="color" id="n-color3" value="#f59e0b"><input type="text" class="form-input" id="n-color3-hex" value="#f59e0b" style="flex:1" oninput="document.getElementById('n-color3').value=this.value"></div></div>
           </div>
         </div>
 
-        <!-- Firebase -->
         <div class="card">
-          <div class="card-title">Firebase — Base de datos</div>
-          <div class="card-sub">Proyecto Firebase exclusivo para esta escuela. Crearlo en console.firebase.google.com</div>
+          <div class="card-title">Firebase — Base de datos de la escuela</div>
+          <div class="card-sub">Proyecto Firebase exclusivo para esta institución</div>
           <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">apiKey</label>
-              <input type="text" class="form-input" id="fb-key" placeholder="AIzaSy...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">authDomain</label>
-              <input type="text" class="form-input" id="fb-auth" placeholder="mi-escuela.firebaseapp.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">projectId</label>
-              <input type="text" class="form-input" id="fb-project" placeholder="mi-escuela">
-            </div>
-            <div class="form-group">
-              <label class="form-label">storageBucket</label>
-              <input type="text" class="form-input" id="fb-storage" placeholder="mi-escuela.appspot.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">messagingSenderId</label>
-              <input type="text" class="form-input" id="fb-sender" placeholder="123456789">
-            </div>
-            <div class="form-group">
-              <label class="form-label">appId</label>
-              <input type="text" class="form-input" id="fb-appid" placeholder="1:123:web:abc123">
-            </div>
+            <div class="form-group"><label class="form-label">apiKey</label><input type="text" class="form-input" id="fb-key" placeholder="AIzaSy..."></div>
+            <div class="form-group"><label class="form-label">authDomain</label><input type="text" class="form-input" id="fb-auth" placeholder="escuela.firebaseapp.com"></div>
+            <div class="form-group"><label class="form-label">projectId</label><input type="text" class="form-input" id="fb-project" placeholder="mi-escuela"></div>
+            <div class="form-group"><label class="form-label">storageBucket</label><input type="text" class="form-input" id="fb-storage" placeholder="mi-escuela.appspot.com"></div>
+            <div class="form-group"><label class="form-label">messagingSenderId</label><input type="text" class="form-input" id="fb-sender" placeholder="123456789012"></div>
+            <div class="form-group"><label class="form-label">appId</label><input type="text" class="form-input" id="fb-appid" placeholder="1:123:web:abc123"></div>
           </div>
         </div>
 
-        <!-- Licencia -->
         <div class="card">
           <div class="card-title">Licencia</div>
           <div class="card-sub">Período de uso contratado</div>
           <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Fecha de inicio</label>
-              <input type="date" class="form-input" id="n-lic-inicio">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Fecha de vencimiento</label>
-              <input type="date" class="form-input" id="n-lic-fin">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Plan</label>
-              <select class="form-input" id="n-plan">
-                <option value="basico">Básico — Comunicados + Portal</option>
-                <option value="estandar" selected>Estándar — + Iosi IA</option>
-                <option value="premium">Premium — + Integraciones</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Precio mensual (ARS)</label>
-              <input type="number" class="form-input" id="n-precio" placeholder="0">
-            </div>
-            <div class="form-group full">
-              <label class="form-label">Notas internas</label>
-              <textarea class="form-input" id="n-notas" placeholder="Contacto comercial, acuerdos especiales..."></textarea>
-            </div>
+            <div class="form-group"><label class="form-label">Fecha de inicio</label><input type="date" class="form-input" id="n-lic-inicio"></div>
+            <div class="form-group"><label class="form-label">Fecha de vencimiento</label><input type="date" class="form-input" id="n-lic-fin"></div>
+            <div class="form-group"><label class="form-label">Plan</label><select class="form-input" id="n-plan"><option value="basico">Básico</option><option value="estandar" selected>Estándar</option><option value="premium">Premium</option></select></div>
+            <div class="form-group"><label class="form-label">Precio mensual (ARS)</label><input type="number" class="form-input" id="n-precio" placeholder="0"></div>
+            <div class="form-group full"><label class="form-label">Notas internas</label><textarea class="form-input" id="n-notas" placeholder="Contacto, acuerdos especiales..."></textarea></div>
           </div>
         </div>
 
@@ -419,18 +303,17 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           <span id="deploy-status" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:8px"></span>
         </div>
 
-        <!-- Resultado del deploy -->
         <div class="deploy-result" id="deploy-result">
           <div style="font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px">// deploy completado</div>
           <div style="font-size:20px;font-weight:800;margin-bottom:8px">App generada ✓</div>
           <div class="deploy-url" id="deploy-url-display"></div>
           <ul class="deploy-steps">
             <li>Repositorio creado en GitHub</li>
-            <li>Archivos de código copiados y configurados</li>
+            <li>Archivos copiados y configurados</li>
             <li>Firebase config inyectada</li>
             <li>Colores y nombre del asistente actualizados</li>
             <li>GitHub Pages activado</li>
-            <li>Licencia registrada en el sistema</li>
+            <li>Licencia guardada en Firebase ORION</li>
           </ul>
           <div style="margin-top:16px;display:flex;gap:12px">
             <button class="btn-primary" onclick="window.open(document.getElementById('deploy-url-display').textContent,'_blank')">Abrir app →</button>
@@ -440,7 +323,7 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         </div>
       </section>
 
-      <!-- ── ESCUELAS ACTIVAS ── -->
+      <!-- ── ESCUELAS ── -->
       <section id="s-escuelas" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// instalaciones</div>
@@ -448,13 +331,10 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           <p class="page-sub">Todas las instancias desplegadas.</p>
         </div>
         <div class="table-wrap">
-          <div class="table-head">
-            <span class="table-title">Listado completo</span>
-            <button class="action-btn" onclick="goTo('nueva')">+ Nueva escuela</button>
-          </div>
+          <div class="table-head"><span class="table-title">Listado completo</span><button class="action-btn" onclick="goTo('nueva')">+ Nueva</button></div>
           <table>
             <thead><tr><th>Escuela</th><th>Asistente IA</th><th>Plan</th><th>Vencimiento</th><th>URL</th><th>Acciones</th></tr></thead>
-            <tbody id="e-table-body"><tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr></tbody>
+            <tbody id="e-table-body"><tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -464,11 +344,9 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         <div class="page-header">
           <div class="page-eyebrow">// licencias</div>
           <h1 class="page-title">Calendario de licencias</h1>
-          <p class="page-sub">Gestión de renovaciones anuales por escuela.</p>
+          <p class="page-sub">Gestión de renovaciones anuales.</p>
         </div>
-        <div class="calendar-grid" id="cal-grid">
-          <div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin licencias registradas.</div>
-        </div>
+        <div class="calendar-grid" id="cal-grid"><div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Cargando...</div></div>
       </section>
 
       <!-- ── LOG ── -->
@@ -478,9 +356,7 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           <h1 class="page-title">Log de deploys</h1>
           <p class="page-sub">Historial completo de todas las operaciones.</p>
         </div>
-        <div class="card">
-          <div id="log-list" style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin registros.</div>
-        </div>
+        <div class="card"><div id="log-list" style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Cargando...</div></div>
       </section>
 
       <!-- ── CONFIG ── -->
@@ -488,33 +364,22 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         <div class="page-header">
           <div class="page-eyebrow">// sistema</div>
           <h1 class="page-title">Configuración</h1>
-          <p class="page-sub">Ajustes globales del super panel.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">Credenciales del panel</div>
-          <div class="card-sub">Cambiá el usuario y contraseña maestra</div>
-          <div class="form-grid">
-            <div class="form-group"><label class="form-label">Usuario</label><input type="text" class="form-input" id="cfg-user" placeholder="admin"></div>
-            <div class="form-group"><label class="form-label">Nueva contraseña</label><input type="password" class="form-input" id="cfg-pass" placeholder="••••••••"></div>
-          </div>
-          <div class="btn-row"><button class="btn-primary" onclick="guardarConfig()">GUARDAR</button></div>
         </div>
         <div class="card">
           <div class="card-title">GitHub defaults</div>
-          <div class="card-sub">Valores por defecto para nuevos deploys</div>
+          <div class="card-sub">Se guardan en Firebase, disponibles desde cualquier dispositivo</div>
           <div class="form-grid">
-            <div class="form-group"><label class="form-label">GitHub Token por defecto</label><input type="password" class="form-input" id="cfg-gh-token" placeholder="ghp_..."><span class="form-hint">Se guarda localmente en tu navegador</span></div>
-            <div class="form-group"><label class="form-label">Usuario GitHub por defecto</label><input type="text" class="form-input" id="cfg-gh-user" placeholder="tu-usuario"></div>
-            <div class="form-group"><label class="form-label">Repo template por defecto</label><input type="text" class="form-input" id="cfg-gh-template" placeholder="IosefcaroAPP-main"></div>
+            <div class="form-group"><label class="form-label">GitHub Token por defecto</label><input type="password" class="form-input" id="cfg-gh-token" placeholder="ghp_..."></div>
+            <div class="form-group"><label class="form-label">Usuario GitHub</label><input type="text" class="form-input" id="cfg-gh-user" placeholder="tu-usuario"></div>
+            <div class="form-group"><label class="form-label">Repo template</label><input type="text" class="form-input" id="cfg-gh-template" placeholder="app-template"></div>
           </div>
-          <div class="btn-row"><button class="btn-primary" onclick="guardarConfigGH()">GUARDAR DEFAULTS</button></div>
+          <div class="btn-row"><button class="btn-primary" onclick="guardarConfigGH()">GUARDAR EN FIREBASE</button></div>
         </div>
         <div class="card">
-          <div class="card-title">Datos del sistema</div>
-          <div class="card-sub">Información almacenada localmente</div>
+          <div class="card-title">Exportar datos</div>
+          <div class="card-sub">Backup completo de escuelas y logs</div>
           <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:16px" id="cfg-data-info">—</div>
           <button class="btn-secondary" onclick="exportarDatos()">EXPORTAR JSON</button>
-          <button class="btn-secondary danger" onclick="if(confirm('¿Borrar TODOS los datos?'))limpiarTodo()" style="border-color:var(--accent3);color:var(--accent3);margin-left:12px">BORRAR TODO</button>
         </div>
       </section>
 
@@ -526,11 +391,11 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 <div class="modal-overlay" id="modal-renovar">
   <div class="modal-box">
     <div class="modal-title">Renovar licencia</div>
-    <p class="modal-sub" id="modal-ren-nombre">Escuela</p>
+    <p class="modal-sub" id="modal-ren-nombre">—</p>
     <div class="form-group" style="margin-bottom:16px"><label class="form-label">Nueva fecha de vencimiento</label><input type="date" class="form-input" id="modal-ren-fecha"></div>
-    <div class="form-group"><label class="form-label">Notas de renovación</label><input type="text" class="form-input" id="modal-ren-nota" placeholder="Renovación 2027, pago recibido..."></div>
+    <div class="form-group"><label class="form-label">Nota de renovación</label><input type="text" class="form-input" id="modal-ren-nota" placeholder="Pago recibido, renovación 2027..."></div>
     <div class="modal-actions">
-      <button class="btn-primary" onclick="confirmarRenovacion()">CONFIRMAR RENOVACIÓN</button>
+      <button class="btn-primary" onclick="confirmarRenovacion()">CONFIRMAR</button>
       <button class="btn-secondary" onclick="document.getElementById('modal-renovar').classList.remove('open')">Cancelar</button>
     </div>
   </div>
@@ -538,303 +403,312 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script>
 // ══════════════════════════════════════
-// STORAGE & STATE
+// 🔧 CONFIGURACIÓN — misma que index.html
 // ══════════════════════════════════════
-const S = {
-  get(k){try{return JSON.parse(localStorage.getItem('orion_'+k))}catch{return null}},
-  set(k,v){localStorage.setItem('orion_'+k,JSON.stringify(v))},
-  del(k){localStorage.removeItem('orion_'+k)}
+const FIREBASE_CONFIG = {
+  apiKey:            "TU_API_KEY",
+  authDomain:        "TU_PROJECT.firebaseapp.com",
+  projectId:         "TU_PROJECT_ID",
+  storageBucket:     "TU_PROJECT.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId:             "TU_APP_ID"
 };
+const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
+// ══════════════════════════════════════
 
-function getCredentials(){return S.get('credentials')||{user:'admin',pass:'Orion2026!'}}
-function getEscuelas(){return S.get('escuelas')||[]}
-function getLogs(){return S.get('logs')||[]}
+firebase.initializeApp(FIREBASE_CONFIG);
+const db   = firebase.firestore();
+const auth = firebase.auth();
 
-function addLog(msg,tipo='info',escuela=''){
-  const logs=getLogs();
-  logs.unshift({msg,tipo,escuela,fecha:new Date().toISOString()});
-  S.set('logs',logs.slice(0,200));
+// ── Auth guard: si no hay sesión, volver al index ──
+auth.onAuthStateChanged(async user => {
+  if (!user || user.email !== ADMIN_EMAIL) {
+    window.location.href = 'index.html'; return;
+  }
+  document.getElementById('hdr-email').textContent = user.email;
+  await initApp();
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+});
+
+// ══════════════════════════════════════
+// DB HELPERS — Firestore
+// ══════════════════════════════════════
+const COL_ESC  = 'orion_escuelas';
+const COL_LOG  = 'orion_logs';
+const COL_CFG  = 'orion_config';
+
+async function dbGetEscuelas() {
+  const snap = await db.collection(COL_ESC).orderBy('creadoEn','desc').get();
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+async function dbAddEscuela(data) {
+  data.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
+  const ref = await db.collection(COL_ESC).add(data);
+  return ref.id;
+}
+async function dbUpdateEscuela(id, data) {
+  await db.collection(COL_ESC).doc(id).update(data);
+}
+async function dbDeleteEscuela(id) {
+  await db.collection(COL_ESC).doc(id).delete();
+}
+async function dbGetLogs() {
+  const snap = await db.collection(COL_LOG).orderBy('fecha','desc').limit(100).get();
+  return snap.docs.map(d => d.data());
+}
+async function dbAddLog(msg, tipo='info', escuela='') {
+  await db.collection(COL_LOG).add({ msg, tipo, escuela, fecha: firebase.firestore.FieldValue.serverTimestamp() });
+}
+async function dbGetConfig() {
+  const doc = await db.collection(COL_CFG).doc('principal').get();
+  return doc.exists ? doc.data() : {};
+}
+async function dbSetConfig(data) {
+  await db.collection(COL_CFG).doc('principal').set(data, { merge: true });
 }
 
-let renovandoId=null;
-
 // ══════════════════════════════════════
-// LOGIN
+// AUTH
 // ══════════════════════════════════════
-function login(){
-  const u=document.getElementById('l-user').value.trim();
-  const p=document.getElementById('l-pass').value.trim();
-  const creds=getCredentials();
-  if(u===creds.user&&p===creds.pass){
-    S.set('session',{ok:true,ts:Date.now()});
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    initApp();
-  }else{
-    document.getElementById('l-err').style.display='block';
-    setTimeout(()=>document.getElementById('l-err').style.display='none',3000);
-  }
-}
-function logout(){S.del('session');location.reload();}
-window.onload=()=>{
-  const sess=S.get('session');
-  if(sess?.ok&&Date.now()-sess.ts<86400000*7){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    initApp();
-  }
-  // Pre-llenar fecha de hoy
-  const hoy=new Date().toISOString().split('T')[0];
-  document.getElementById('n-lic-inicio').value=hoy;
-  const fin=new Date();fin.setFullYear(fin.getFullYear()+1);
-  document.getElementById('n-lic-fin').value=fin.toISOString().split('T')[0];
-  // Cargar defaults GH
-  const cfgGH=S.get('gh_defaults')||{};
-  if(cfgGH.token)document.getElementById('n-gh-token').value=cfgGH.token;
-  if(cfgGH.user)document.getElementById('n-gh-user').value=cfgGH.user;
-  if(cfgGH.template)document.getElementById('n-gh-template-repo').value=cfgGH.template;
-  // Sync colores
-  ['n-color1','n-color2','n-color3'].forEach(id=>{
-    document.getElementById(id).addEventListener('input',e=>{
-      document.getElementById(id+'-hex').value=e.target.value;
-    });
-  });
-};
-
-// ══════════════════════════════════════
-// NAV
-// ══════════════════════════════════════
-function goTo(sec){
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelector(`[onclick="goTo('${sec}')"]`).classList.add('active');
-  document.getElementById('s-'+sec).classList.add('active');
-  if(sec==='dashboard')renderDashboard();
-  if(sec==='escuelas')renderEscuelas();
-  if(sec==='calendario')renderCalendario();
-  if(sec==='log')renderLog();
-  if(sec==='config')renderConfig();
+async function doLogout() {
+  await auth.signOut();
+  window.location.href = 'index.html';
 }
 
 // ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
-function initApp(){renderDashboard();}
+async function initApp() {
+  // Fechas por defecto
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('n-lic-inicio').value = hoy;
+  const fin = new Date(); fin.setFullYear(fin.getFullYear()+1);
+  document.getElementById('n-lic-fin').value = fin.toISOString().split('T')[0];
+  // Cargar config de GitHub
+  const cfg = await dbGetConfig();
+  if (cfg.ghToken)    document.getElementById('n-gh-token').value = cfg.ghToken;
+  if (cfg.ghUser)     document.getElementById('n-gh-user').value  = cfg.ghUser;
+  if (cfg.ghTemplate) document.getElementById('n-gh-template-repo').value = cfg.ghTemplate;
+  // Sync color pickers
+  ['n-color1','n-color2','n-color3'].forEach(id => {
+    document.getElementById(id).addEventListener('input', e => {
+      document.getElementById(id+'-hex').value = e.target.value;
+    });
+  });
+  renderDashboard();
+}
+
+// ══════════════════════════════════════
+// NAV
+// ══════════════════════════════════════
+function goTo(sec) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelector(`[onclick="goTo('${sec}')"]`).classList.add('active');
+  document.getElementById('s-'+sec).classList.add('active');
+  if(sec==='dashboard') renderDashboard();
+  if(sec==='escuelas')  renderEscuelas();
+  if(sec==='calendario')renderCalendario();
+  if(sec==='log')       renderLog();
+  if(sec==='config')    renderConfig();
+}
 
 // ══════════════════════════════════════
 // DASHBOARD
 // ══════════════════════════════════════
-function renderDashboard(){
-  const esc=getEscuelas();
-  const ahora=Date.now();
-  const activas=esc.filter(e=>new Date(e.licFin)>ahora);
-  const porVencer=activas.filter(e=>(new Date(e.licFin)-ahora)<30*86400000);
-  const vencidas=esc.filter(e=>new Date(e.licFin)<=ahora);
-  document.getElementById('d-total').textContent=esc.length;
-  document.getElementById('d-activas').textContent=activas.length;
-  document.getElementById('d-por-vencer').textContent=porVencer.length;
-  document.getElementById('d-vencidas').textContent=vencidas.length;
-  // Tabla
-  const tbody=document.getElementById('d-table-body');
-  if(!esc.length){tbody.innerHTML='<tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr>';return;}
-  tbody.innerHTML=esc.slice(0,5).map(e=>`
+async function renderDashboard() {
+  const esc = await dbGetEscuelas();
+  const ahora = Date.now();
+  const activas    = esc.filter(e => toMs(e.licFin) > ahora);
+  const porVencer  = activas.filter(e => toMs(e.licFin) - ahora < 30*86400000);
+  const vencidas   = esc.filter(e => toMs(e.licFin) <= ahora);
+  document.getElementById('d-total').textContent     = esc.length;
+  document.getElementById('d-activas').textContent   = activas.length;
+  document.getElementById('d-por-vencer').textContent= porVencer.length;
+  document.getElementById('d-vencidas').textContent  = vencidas.length;
+  const tbody = document.getElementById('d-table-body');
+  if (!esc.length) { tbody.innerHTML='<tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr>'; }
+  else tbody.innerHTML = esc.slice(0,5).map(e=>`
     <tr>
       <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.repoUser}/${e.repoNombre}</div></div></div></td>
       <td style="font-weight:700">${e.iosi}</td>
-      <td>${e.url?`<a href="${e.url}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--accent2)">Ver app ↗</a>`:'<span style="color:var(--muted);font-size:11px">—</span>'}</td>
-      <td style="font-family:var(--font-mono);font-size:11px">${e.licFin}</td>
+      <td>${e.url?`<a href="${e.url}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--accent2)">Ver ↗</a>`:'—'}</td>
+      <td style="font-family:var(--font-mono);font-size:11px">${e.licFin||'—'}</td>
       <td>${getBadge(e)}</td>
     </tr>`).join('');
   // Log reciente
-  const logs=getLogs().slice(0,3);
-  document.getElementById('d-log-reciente').innerHTML=logs.length?logs.map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px"><span style="color:var(--muted)">${fmtFecha(l.fecha)}</span><span>${l.msg}</span></div>`).join(''):'Sin actividad.';
-}
-
-function getBadge(e){
-  const ahora=Date.now();const fin=new Date(e.licFin);
-  if(fin<=ahora)return'<span class="badge badge-expired"><span class="badge-dot"></span>Vencida</span>';
-  if(fin-ahora<30*86400000)return'<span class="badge badge-warning"><span class="badge-dot"></span>Por vencer</span>';
-  return'<span class="badge badge-active"><span class="badge-dot"></span>Activa</span>';
+  const logs = await dbGetLogs();
+  document.getElementById('d-log-reciente').innerHTML = logs.length
+    ? logs.slice(0,4).map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px"><span style="color:var(--muted);min-width:130px;font-size:10px">${fmtFecha(l.fecha)}</span><span style="font-size:12px">${l.msg}</span></div>`).join('')
+    : 'Sin actividad.';
 }
 
 // ══════════════════════════════════════
 // ESCUELAS
 // ══════════════════════════════════════
-function renderEscuelas(){
-  const esc=getEscuelas();
-  const tbody=document.getElementById('e-table-body');
-  if(!esc.length){tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones.</td></tr>';return;}
-  tbody.innerHTML=esc.map((e,i)=>`
+async function renderEscuelas() {
+  const esc = await dbGetEscuelas();
+  const tbody = document.getElementById('e-table-body');
+  if (!esc.length) { tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones.</td></tr>'; return; }
+  tbody.innerHTML = esc.map(e=>`
     <tr>
       <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.adminEmail}</div></div></div></td>
       <td style="font-weight:700">${e.iosi}</td>
       <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--accent2);text-transform:uppercase">${e.plan||'estándar'}</span></td>
-      <td style="font-family:var(--font-mono);font-size:11px">${e.licFin}</td>
+      <td style="font-family:var(--font-mono);font-size:11px">${e.licFin||'—'}</td>
       <td>${e.url?`<a href="${e.url}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--accent)">↗ ${e.url.replace('https://','')}</a>`:'—'}</td>
       <td>
-        <button class="action-btn" onclick="abrirRenovar(${i})">Renovar</button>
-        <button class="action-btn danger" onclick="eliminarEscuela(${i})">Eliminar</button>
+        <button class="action-btn" onclick="abrirRenovar('${e.id}','${e.nombre}','${e.licFin||''}')">Renovar</button>
+        <button class="action-btn danger" onclick="eliminarEscuela('${e.id}','${e.nombre}')">Eliminar</button>
       </td>
     </tr>`).join('');
 }
 
-function eliminarEscuela(i){
-  if(!confirm('¿Eliminar esta escuela del panel? El repo en GitHub no se borra.'))return;
-  const esc=getEscuelas();
-  addLog(`Escuela eliminada del panel: ${esc[i].nombre}`,'warn',esc[i].nombre);
-  esc.splice(i,1);S.set('escuelas',esc);
-  renderEscuelas();toast('Escuela eliminada del panel.');
+async function eliminarEscuela(id, nombre) {
+  if (!confirm(`¿Eliminar "${nombre}" del panel? El repo de GitHub no se borra.`)) return;
+  await dbDeleteEscuela(id);
+  await dbAddLog(`Escuela eliminada del panel: ${nombre}`, 'warn', nombre);
+  toast('Escuela eliminada.'); renderEscuelas(); renderDashboard();
 }
 
 // ══════════════════════════════════════
 // CALENDARIO
 // ══════════════════════════════════════
-function renderCalendario(){
-  const esc=getEscuelas();
-  const grid=document.getElementById('cal-grid');
-  if(!esc.length){grid.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin licencias registradas.</div>';return;}
-  const ahora=Date.now();
-  grid.innerHTML=esc.map((e,i)=>{
-    const inicio=new Date(e.licInicio).getTime();
-    const fin=new Date(e.licFin).getTime();
-    const total=fin-inicio;const pasado=Math.min(ahora-inicio,total);
-    const pct=Math.max(0,Math.min(100,Math.round(pasado/total*100)));
-    const diasRestantes=Math.max(0,Math.round((fin-ahora)/86400000));
-    const expiring=(fin-ahora)<30*86400000&&fin>ahora;
-    const expired=fin<=ahora;
-    return`<div class="cal-card ${expiring?'expiring':''} ${expired?'expired':''}">
-      <button class="cal-renew" onclick="abrirRenovar(${i})">Renovar</button>
+async function renderCalendario() {
+  const esc = await dbGetEscuelas();
+  const grid = document.getElementById('cal-grid');
+  if (!esc.length) { grid.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin licencias.</div>'; return; }
+  const ahora = Date.now();
+  grid.innerHTML = esc.map(e => {
+    const inicio = toMs(e.licInicio), fin = toMs(e.licFin);
+    const pct = Math.max(0, Math.min(100, Math.round((ahora-inicio)/(fin-inicio)*100)));
+    const dias = Math.max(0, Math.round((fin-ahora)/86400000));
+    const expiring = (fin-ahora)<30*86400000 && fin>ahora;
+    const expired  = fin<=ahora;
+    return `<div class="cal-card ${expiring?'expiring':''} ${expired?'expired':''}">
+      <button class="cal-renew" onclick="abrirRenovar('${e.id}','${e.nombre}','${e.licFin||''}')">Renovar</button>
       <div class="cal-school">${e.emoji||'🏫'} ${e.nombre}</div>
-      <div class="cal-date">${e.licInicio} → ${e.licFin}</div>
+      <div class="cal-date">${e.licInicio||'—'} → ${e.licFin||'—'}</div>
       <div class="cal-bar-bg"><div class="cal-bar-fill ${expiring||expired?'warning':''}" style="width:${pct}%"></div></div>
-      <div class="cal-days"><span>${getBadge(e)}</span><span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">${expired?'Vencida':diasRestantes+' días restantes'}</span></div>
+      <div class="cal-days"><span>${getBadge(e)}</span><span>${expired?'Vencida':dias+' días'}</span></div>
     </div>`;
   }).join('');
 }
 
-// ── Renovar ──
-function abrirRenovar(i){
-  renovandoId=i;
-  const esc=getEscuelas()[i];
-  document.getElementById('modal-ren-nombre').textContent=esc.nombre;
-  const nueva=new Date(esc.licFin);nueva.setFullYear(nueva.getFullYear()+1);
-  document.getElementById('modal-ren-fecha').value=nueva.toISOString().split('T')[0];
-  document.getElementById('modal-ren-nota').value='';
+let renovandoId = null;
+function abrirRenovar(id, nombre, licFin) {
+  renovandoId = id;
+  document.getElementById('modal-ren-nombre').textContent = nombre;
+  const nueva = licFin ? new Date(licFin) : new Date();
+  nueva.setFullYear(nueva.getFullYear()+1);
+  document.getElementById('modal-ren-fecha').value = nueva.toISOString().split('T')[0];
+  document.getElementById('modal-ren-nota').value = '';
   document.getElementById('modal-renovar').classList.add('open');
 }
-function confirmarRenovacion(){
-  const esc=getEscuelas();
-  const nuevaFin=document.getElementById('modal-ren-fecha').value;
-  const nota=document.getElementById('modal-ren-nota').value;
-  esc[renovandoId].licFin=nuevaFin;
-  esc[renovandoId].renovaciones=(esc[renovandoId].renovaciones||[]);
-  esc[renovandoId].renovaciones.push({fecha:new Date().toISOString(),nuevaFin,nota});
-  S.set('escuelas',esc);
-  addLog(`Licencia renovada: ${esc[renovandoId].nombre} hasta ${nuevaFin}`,'success',esc[renovandoId].nombre);
+async function confirmarRenovacion() {
+  const nuevaFin = document.getElementById('modal-ren-fecha').value;
+  const nota     = document.getElementById('modal-ren-nota').value;
+  await dbUpdateEscuela(renovandoId, {
+    licFin: nuevaFin,
+    renovaciones: firebase.firestore.FieldValue.arrayUnion({ fecha: new Date().toISOString(), nuevaFin, nota })
+  });
+  await dbAddLog(`Licencia renovada hasta ${nuevaFin}`, 'success');
   document.getElementById('modal-renovar').classList.remove('open');
-  toast('Licencia renovada correctamente ✓','success');
-  renderCalendario();renderDashboard();
+  toast('Licencia renovada ✓', 'success');
+  renderCalendario(); renderDashboard();
 }
 
 // ══════════════════════════════════════
 // LOG
 // ══════════════════════════════════════
-function renderLog(){
-  const logs=getLogs();
-  const cont=document.getElementById('log-list');
-  if(!logs.length){cont.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin registros.</div>';return;}
-  cont.innerHTML=logs.map(l=>{
-    const col=l.tipo==='success'?'var(--accent)':l.tipo==='error'?'var(--accent3)':l.tipo==='warn'?'#f59e0b':'var(--accent2)';
-    return`<div class="log-entry"><span class="log-time">${fmtFecha(l.fecha)}</span><div class="log-dot" style="background:${col}"></div><div class="log-msg">${l.msg}${l.escuela?`<span class="log-tag">${l.escuela}</span>`:''}</div></div>`;
+async function renderLog() {
+  const logs = await dbGetLogs();
+  const cont = document.getElementById('log-list');
+  if (!logs.length) { cont.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin registros.</div>'; return; }
+  cont.innerHTML = logs.map(l => {
+    const col = l.tipo==='success'?'var(--accent)':l.tipo==='error'?'var(--accent3)':l.tipo==='warn'?'#f59e0b':'var(--accent2)';
+    return `<div class="log-entry"><span class="log-time">${fmtFecha(l.fecha)}</span><div class="log-dot" style="background:${col}"></div><div class="log-msg">${l.msg}${l.escuela?`<span class="log-tag">${l.escuela}</span>`:''}</div></div>`;
   }).join('');
 }
 
 // ══════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════
-function renderConfig(){
-  const creds=getCredentials();
-  document.getElementById('cfg-user').value=creds.user;
-  const esc=getEscuelas();
-  document.getElementById('cfg-data-info').textContent=`${esc.length} escuelas · ${getLogs().length} logs · almacenamiento local`;
-  const cfgGH=S.get('gh_defaults')||{};
-  if(cfgGH.token)document.getElementById('cfg-gh-token').value=cfgGH.token;
-  if(cfgGH.user)document.getElementById('cfg-gh-user').value=cfgGH.user;
-  if(cfgGH.template)document.getElementById('cfg-gh-template').value=cfgGH.template;
+async function renderConfig() {
+  const cfg = await dbGetConfig();
+  if (cfg.ghToken)    document.getElementById('cfg-gh-token').value    = cfg.ghToken;
+  if (cfg.ghUser)     document.getElementById('cfg-gh-user').value     = cfg.ghUser;
+  if (cfg.ghTemplate) document.getElementById('cfg-gh-template').value = cfg.ghTemplate;
+  const esc = await dbGetEscuelas();
+  document.getElementById('cfg-data-info').textContent = `${esc.length} escuelas en Firebase`;
 }
-function guardarConfig(){
-  const u=document.getElementById('cfg-user').value.trim();
-  const p=document.getElementById('cfg-pass').value.trim();
-  if(!u)return toast('Ingresá un usuario.','error');
-  const creds=getCredentials();
-  S.set('credentials',{user:u,pass:p||creds.pass});
-  toast('Credenciales actualizadas ✓','success');
+async function guardarConfigGH() {
+  const data = {
+    ghToken:    document.getElementById('cfg-gh-token').value,
+    ghUser:     document.getElementById('cfg-gh-user').value,
+    ghTemplate: document.getElementById('cfg-gh-template').value,
+  };
+  await dbSetConfig(data);
+  // También pre-llenar en el form de nueva escuela
+  document.getElementById('n-gh-token').value          = data.ghToken;
+  document.getElementById('n-gh-user').value           = data.ghUser;
+  document.getElementById('n-gh-template-repo').value  = data.ghTemplate;
+  toast('Config guardada en Firebase ✓', 'success');
 }
-function guardarConfigGH(){
-  S.set('gh_defaults',{token:document.getElementById('cfg-gh-token').value,user:document.getElementById('cfg-gh-user').value,template:document.getElementById('cfg-gh-template').value});
-  // Rellenar form nueva escuela con defaults
-  document.getElementById('n-gh-token').value=document.getElementById('cfg-gh-token').value;
-  document.getElementById('n-gh-user').value=document.getElementById('cfg-gh-user').value;
-  document.getElementById('n-gh-template-repo').value=document.getElementById('cfg-gh-template').value;
-  toast('Defaults de GitHub guardados ✓','success');
-}
-function exportarDatos(){
-  const data={escuelas:getEscuelas(),logs:getLogs(),fecha:new Date().toISOString()};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='orion-backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();
+async function exportarDatos() {
+  const esc  = await dbGetEscuelas();
+  const logs = await dbGetLogs();
+  const blob = new Blob([JSON.stringify({escuelas:esc,logs,fecha:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='orion-backup-'+new Date().toISOString().split('T')[0]+'.json'; a.click();
   toast('Datos exportados ✓','success');
 }
-function limpiarTodo(){S.del('escuelas');S.del('logs');toast('Datos eliminados.','error');renderDashboard();}
 
 // ══════════════════════════════════════
 // DEPLOY — GitHub API
 // ══════════════════════════════════════
-async function deployEscuela(){
+async function deployEscuela() {
   const ghToken=v('n-gh-token'),ghUser=v('n-gh-user'),templateRepo=v('n-gh-template-repo'),newRepo=v('n-gh-repo');
   const nombre=v('n-nombre'),iosi=v('n-iosi'),adminEmail=v('n-admin-email'),adminPass=v('n-admin-pass');
   const logo=v('n-logo'),emoji=v('n-emoji')||'🏫';
   const color1=v('n-color1-hex'),color2=v('n-color2-hex'),color3=v('n-color3-hex');
   const fbKey=v('fb-key'),fbAuth=v('fb-auth'),fbProject=v('fb-project'),fbStorage=v('fb-storage'),fbSender=v('fb-sender'),fbAppId=v('fb-appid');
   const licInicio=v('n-lic-inicio'),licFin=v('n-lic-fin'),plan=v('n-plan'),precio=v('n-precio'),notas=v('n-notas');
-  // Validar
-  const campos=[['GitHub Token',ghToken],['Usuario GitHub',ghUser],['Repo template',templateRepo],['Nombre repo nuevo',newRepo],['Nombre escuela',nombre],['Nombre asistente IA',iosi],['Email admin',adminEmail],['Firebase apiKey',fbKey],['Firebase projectId',fbProject]];
-  for(const[label,val]of campos){if(!val){toast(`Falta: ${label}`,'error');return;}}
+  const req=[['GitHub Token',ghToken],['Usuario GitHub',ghUser],['Repo template',templateRepo],['Nombre repo nuevo',newRepo],['Nombre escuela',nombre],['Asistente IA',iosi],['Email admin',adminEmail],['Firebase apiKey',fbKey],['Firebase projectId',fbProject]];
+  for(const[l,val]of req){if(!val){toast(`Falta: ${l}`,'error');return;}}
   setDeployLoading(true);
   const status=document.getElementById('deploy-status');
-  const steps=[
-    ['Verificando token de GitHub...', ()=>verificarToken(ghToken,ghUser)],
-    ['Obteniendo archivos del template...', ()=>obtenerArchivosTemplate(ghToken,ghUser,templateRepo)],
-    ['Creando repositorio nuevo...', ()=>crearRepo(ghToken,ghUser,newRepo,nombre)],
-    ['Subiendo archivos configurados...', ()=>subirArchivos(ghToken,ghUser,newRepo,nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass)],
-    ['Activando GitHub Pages...', ()=>activarPages(ghToken,ghUser,newRepo)],
-  ];
-  let archivosTemplate=null;
   try{
-    for(let i=0;i<steps.length;i++){
-      status.textContent=steps[i][0];
-      if(i===1){archivosTemplate=await steps[i][1]();}
-      else if(i===3){await steps[i][1](archivosTemplate);}
-      else{await steps[i][1]();}
-    }
+    status.textContent='Verificando token...';
+    await verificarToken(ghToken,ghUser);
+    status.textContent='Obteniendo template...';
+    const archivos=await obtenerArchivosTemplate(ghToken,ghUser,templateRepo);
+    status.textContent='Creando repositorio...';
+    await crearRepo(ghToken,ghUser,newRepo,nombre);
+    status.textContent='Subiendo archivos configurados...';
+    await subirArchivos(ghToken,ghUser,newRepo,nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass,archivos);
+    status.textContent='Activando GitHub Pages...';
+    await activarPages(ghToken,ghUser,newRepo);
     const appUrl=`https://${ghUser}.github.io/${newRepo}`;
     const repoUrl=`https://github.com/${ghUser}/${newRepo}`;
-    // Guardar escuela
-    const esc=getEscuelas();
-    esc.unshift({nombre,iosi,adminEmail,logo,emoji,color1,color2,color3,repoUser:ghUser,repoNombre:newRepo,plan,precio,licInicio,licFin,notas,url:appUrl,repoUrl,creadoEn:new Date().toISOString()});
-    S.set('escuelas',esc);
-    addLog(`Deploy exitoso: ${nombre} → ${appUrl}`,'success',nombre);
-    // Mostrar resultado
+    const escData={nombre,iosi,adminEmail,logo,emoji,color1,color2,color3,repoUser:ghUser,repoNombre:newRepo,plan,precio,licInicio,licFin,notas,url:appUrl,repoUrl};
+    await dbAddEscuela(escData);
+    await dbAddLog(`Deploy exitoso: ${nombre} → ${appUrl}`,'success',nombre);
     document.getElementById('deploy-url-display').textContent=appUrl;
     document.getElementById('deploy-repo-url').textContent=repoUrl;
     document.getElementById('deploy-result').style.display='block';
     status.textContent='';
     toast('¡App desplegada exitosamente! ✓','success');
-    renderDashboard();
-  }catch(e){
+  } catch(e) {
     toast('Error: '+e.message,'error');
-    addLog(`Error de deploy: ${e.message}`,'error',nombre);
+    await dbAddLog(`Error de deploy: ${e.message}`,'error',nombre);
     status.textContent='Error: '+e.message;
   }
   setDeployLoading(false);
@@ -842,93 +716,70 @@ async function deployEscuela(){
 
 async function verificarToken(token,user){
   const r=await ghFetch(`https://api.github.com/users/${user}`,token);
-  if(!r.ok)throw new Error('Token de GitHub inválido o usuario no encontrado.');
+  if(!r.ok)throw new Error('Token inválido o usuario no encontrado.');
 }
-
 async function obtenerArchivosTemplate(token,user,repo){
-  // Obtener árbol del repo
   const r=await ghFetch(`https://api.github.com/repos/${user}/${repo}/git/trees/HEAD?recursive=1`,token);
-  if(!r.ok)throw new Error('No se pudo acceder al repo template. Verificá el nombre.');
+  if(!r.ok)throw new Error('No se pudo acceder al repo template.');
   const data=await r.json();
   const archivos=[];
   for(const item of data.tree.filter(t=>t.type==='blob'&&!t.path.includes('node_modules'))){
     const fr=await ghFetch(`https://api.github.com/repos/${user}/${repo}/contents/${item.path}`,token);
-    if(fr.ok){const fd=await fr.json();archivos.push({path:item.path,content:fd.content,encoding:fd.encoding});}
+    if(fr.ok){const fd=await fr.json();archivos.push({path:item.path,content:fd.content});}
   }
   return archivos;
 }
-
 async function crearRepo(token,user,newRepo,nombre){
   const r=await ghFetch(`https://api.github.com/user/repos`,token,'POST',{name:newRepo,description:`App institucional — ${nombre}`,private:false,auto_init:false});
   if(!r.ok){const e=await r.json();throw new Error(e.message||'No se pudo crear el repo.');}
-  await sleep(2000); // Esperar que GitHub inicialice
+  await sleep(2000);
 }
-
 async function subirArchivos(token,user,newRepo,nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass,archivos){
   if(!archivos?.length)throw new Error('No se obtuvieron archivos del template.');
   for(const arch of archivos){
-    let contenido=arch.content;
-    // Decodificar base64
     let texto;
-    try{texto=decodeURIComponent(escape(atob(contenido.replace(/\n/g,''))));}
-    catch{texto=atob(contenido.replace(/\n/g,''));}
-    // Reemplazar valores
+    try{texto=decodeURIComponent(escape(atob(arch.content.replace(/\n/g,''))));}
+    catch{texto=atob(arch.content.replace(/\n/g,''));}
     texto=inyectarValores(texto,{nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass});
-    // Re-codificar
     const b64=btoa(unescape(encodeURIComponent(texto)));
     const r=await ghFetch(`https://api.github.com/repos/${user}/${newRepo}/contents/${arch.path}`,token,'PUT',{message:`Init: ${arch.path}`,content:b64});
     if(!r.ok){const e=await r.json();if(e.message&&!e.message.includes('already exists'))throw new Error(`Error subiendo ${arch.path}: ${e.message}`);}
     await sleep(150);
   }
 }
-
 async function activarPages(token,user,repo){
   await sleep(3000);
-  const r=await ghFetch(`https://api.github.com/repos/${user}/${repo}/pages`,token,'POST',{source:{branch:'main',path:'/'}});
-  // Pages puede tardar, no fallar si ya existe
+  await ghFetch(`https://api.github.com/repos/${user}/${repo}/pages`,token,'POST',{source:{branch:'main',path:'/'}});
 }
-
 function inyectarValores(texto,cfg){
-  // Firebase config
   const fbConfig=`{apiKey:"${cfg.fbKey}",authDomain:"${cfg.fbAuth}",projectId:"${cfg.fbProject}",storageBucket:"${cfg.fbStorage}",messagingSenderId:"${cfg.fbSender}",appId:"${cfg.fbAppId}"}`;
-  // Reemplazar config de Firebase (el patrón que usa Iosef)
-  texto=texto.replace(/{apiKey:"AIzaSy[^}]+"[^}]+}/g, fbConfig);
-  // Nombre institución
-  texto=texto.replace(/Instituto Iosef Caro/g, cfg.nombre);
-  texto=texto.replace(/Iosef Caro/g, cfg.nombre);
-  texto=texto.replace(/app-iosefcaro/g, cfg.fbProject);
-  // Nombre del asistente IA
-  texto=texto.replace(/\bIosi\b/g, cfg.iosi);
-  texto=texto.replace(/\biosi\b/g, cfg.iosi.toLowerCase());
-  texto=texto.replace(/IOSI/g, cfg.iosi.toUpperCase());
-  // Admin credentials
-  texto=texto.replace(/uriel\.bacher@gmail\.com/g, cfg.adminEmail);
-  texto=texto.replace(/Gallardo10/g, cfg.adminPass);
-  // Logo
-  if(cfg.logo){texto=texto.replace(/src="[^"]*logo[^"]*"/g,`src="${cfg.logo}"`);}
-  // Colores
-  texto=texto.replace(/from-indigo-600 to-violet-600/g,'from-['+cfg.color1+'] to-['+cfg.color2+']');
-  texto=texto.replace(/#6c47ff/gi, cfg.color1);
-  texto=texto.replace(/#a855f7/gi, cfg.color2);
-  texto=texto.replace(/#f59e0b/gi, cfg.color3);
-  // Emoji
-  texto=texto.replace(/🏫/g, cfg.emoji||'🏫');
+  texto=texto.replace(/{apiKey:"AIzaSy[^}]+"[^}]+}/g,fbConfig);
+  texto=texto.replace(/Instituto Iosef Caro/g,cfg.nombre);
+  texto=texto.replace(/Iosef Caro/g,cfg.nombre);
+  texto=texto.replace(/app-iosefcaro/g,cfg.fbProject);
+  texto=texto.replace(/\bIosi\b/g,cfg.iosi);
+  texto=texto.replace(/\biosi\b/g,cfg.iosi.toLowerCase());
+  texto=texto.replace(/IOSI/g,cfg.iosi.toUpperCase());
+  texto=texto.replace(/uriel\.bacher@gmail\.com/g,cfg.adminEmail);
+  texto=texto.replace(/Gallardo10/g,cfg.adminPass);
+  if(cfg.logo)texto=texto.replace(/src="[^"]*logo[^"]*"/g,`src="${cfg.logo}"`);
+  texto=texto.replace(/#6c47ff/gi,cfg.color1);
+  texto=texto.replace(/#a855f7/gi,cfg.color2);
+  texto=texto.replace(/#f59e0b/gi,cfg.color3);
+  texto=texto.replace(/🏫/g,cfg.emoji||'🏫');
   return texto;
 }
-
 async function ghFetch(url,token,method='GET',body=null){
-  const opts={method,headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json','X-GitHub-Api-Version':'2022-11-28'}};
+  const opts={method,headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}};
   if(body)opts.body=JSON.stringify(body);
   return fetch(url,opts);
 }
-
 function setDeployLoading(on){
   document.getElementById('deploy-spinner').style.display=on?'block':'none';
   document.getElementById('deploy-label').textContent=on?'Desplegando...':'⚡ GENERAR Y DEPLOYAR';
   document.getElementById('btn-deploy').disabled=on;
   if(on)document.getElementById('deploy-result').style.display='none';
 }
-
 function limpiarFormulario(){
   ['n-nombre','n-iosi','n-admin-email','n-admin-pass','n-logo','n-emoji','n-gh-repo','fb-key','fb-auth','fb-project','fb-storage','fb-sender','fb-appid','n-notas','n-precio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('deploy-result').style.display='none';
@@ -940,7 +791,18 @@ function limpiarFormulario(){
 // ══════════════════════════════════════
 function v(id){return(document.getElementById(id)?.value||'').trim();}
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function fmtFecha(iso){try{return new Date(iso).toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return iso;}}
+function toMs(val){if(!val)return 0;if(val?.seconds)return val.seconds*1000;return new Date(val).getTime();}
+function fmtFecha(val){
+  if(!val)return'—';
+  const d=val?.seconds?new Date(val.seconds*1000):new Date(val);
+  try{return d.toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return String(val);}
+}
+function getBadge(e){
+  const ahora=Date.now();const fin=toMs(e.licFin);
+  if(fin<=ahora)return'<span class="badge badge-expired"><span class="badge-dot"></span>Vencida</span>';
+  if(fin-ahora<30*86400000)return'<span class="badge badge-warning"><span class="badge-dot"></span>Por vencer</span>';
+  return'<span class="badge badge-active"><span class="badge-dot"></span>Activa</span>';
+}
 function toast(msg,tipo='info'){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast show'+(tipo==='success'?' success':tipo==='error'?' error':'');
