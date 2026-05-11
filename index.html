@@ -111,39 +111,55 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#
   <span id="fb-label">Conectando...</span>
 </div>
 
-<script type="module">
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getFirestore, doc, setDoc }            from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged,
-         signInWithEmailAndPassword }           from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-
-// ── Config ORION ──
-const firebaseConfig = {
-  apiKey:            "AIzaSyAnt0izxpGlF_uc47lEgwYaPQSDH4EkEAE",
-  authDomain:        "orion-panel-59dab.firebaseapp.com",
-  projectId:         "orion-panel-59dab",
-  storageBucket:     "orion-panel-59dab.firebasestorage.app",
-  messagingSenderId: "322169536252",
-  appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script>
+// ══════════════════════════════════════
+// 🔧 CONFIGURACIÓN — reemplazá con tus credenciales de Firebase
+// ══════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:            "TU_API_KEY",
+  authDomain:        "TU_PROJECT.firebaseapp.com",
+  projectId:         "TU_PROJECT_ID",
+  storageBucket:     "TU_PROJECT.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId:             "TU_APP_ID"
 };
-const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email
 
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const auth = getAuth(app);
+// Email del administrador principal (vos)
+const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
+// ══════════════════════════════════════
 
-// Verificar conexión
+let db, auth;
+
 try {
-  await setDoc(doc(db, '_ping', 'check'), { ts: Date.now() });
-  document.getElementById('fb-dot').className    = 'fb-dot ok';
-  document.getElementById('fb-label').textContent = 'Firebase conectado';
-} catch {
-  document.getElementById('fb-dot').className    = 'fb-dot err';
-  document.getElementById('fb-label').textContent = 'Error de conexión';
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db   = firebase.firestore();
+  auth = firebase.auth();
+
+  if (FIREBASE_CONFIG.apiKey === 'TU_API_KEY') {
+    document.getElementById('fb-dot').className   = 'fb-dot err';
+    document.getElementById('fb-label').textContent = 'Firebase sin configurar';
+    document.getElementById('setup-banner').style.display = 'block';
+  } else {
+    // Verificar conexión real
+    db.collection('_ping').doc('check').set({ ts: Date.now() }).then(() => {
+      document.getElementById('fb-dot').className   = 'fb-dot ok';
+      document.getElementById('fb-label').textContent = 'Firebase conectado';
+    }).catch(() => {
+      document.getElementById('fb-dot').className   = 'fb-dot err';
+      document.getElementById('fb-label').textContent = 'Error de conexión';
+    });
+  }
+} catch(e) {
+  document.getElementById('fb-dot').className   = 'fb-dot err';
+  document.getElementById('fb-label').textContent = 'Error de inicialización';
 }
 
 // Sesión activa → ir directo al panel
-onAuthStateChanged(auth, user => {
+firebase.auth().onAuthStateChanged(user => {
   if (user && user.email === ADMIN_EMAIL) {
     window.location.href = 'super-panel.html';
   }
@@ -152,29 +168,28 @@ onAuthStateChanged(auth, user => {
 async function doLogin() {
   const email = document.getElementById('inp-email').value.trim();
   const pass  = document.getElementById('inp-pass').value.trim();
-  document.getElementById('err-msg').style.display = 'none';
+  const errEl = document.getElementById('err-msg');
+  errEl.style.display = 'none';
 
   if (!email || !pass) { showErr('Completá email y contraseña.'); return; }
   if (email !== ADMIN_EMAIL) { showErr('Email no autorizado.'); return; }
 
   setLoading(true);
   try {
-    await signInWithEmailAndPassword(auth, email, pass);
+    await firebase.auth().signInWithEmailAndPassword(email, pass);
     // onAuthStateChanged se encarga del redirect
   } catch(e) {
     const msgs = {
-      'auth/wrong-password':         'Contraseña incorrecta.',
-      'auth/invalid-credential':     'Email o contraseña incorrectos.',
-      'auth/user-not-found':         'Usuario no encontrado.',
-      'auth/invalid-email':          'Email inválido.',
-      'auth/too-many-requests':      'Demasiados intentos. Esperá unos minutos.',
+      'auth/wrong-password':    'Contraseña incorrecta.',
+      'auth/user-not-found':    'Usuario no encontrado.',
+      'auth/invalid-email':     'Email inválido.',
+      'auth/too-many-requests': 'Demasiados intentos. Esperá unos minutos.',
       'auth/network-request-failed': 'Sin conexión a internet.',
     };
     showErr(msgs[e.code] || 'Error: ' + e.message);
   }
   setLoading(false);
 }
-window.doLogin = doLogin;
 
 function showErr(msg) {
   const el = document.getElementById('err-msg');
