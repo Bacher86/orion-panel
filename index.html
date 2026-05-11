@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ORION — Acceso</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#08090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ORION">
+<link rel="apple-touch-icon" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
@@ -111,94 +117,93 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#
   <span id="fb-label">Conectando...</span>
 </div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script>
-// ══════════════════════════════════════
-// 🔧 CONFIGURACIÓN — reemplazá con tus credenciales de Firebase
-// ══════════════════════════════════════
-const FIREBASE_CONFIG = {
-  apiKey:            "TU_API_KEY",
-  authDomain:        "TU_PROJECT.firebaseapp.com",
-  projectId:         "TU_PROJECT_ID",
-  storageBucket:     "TU_PROJECT.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId:             "TU_APP_ID"
+<script type="module">
+import { initializeApp }                     from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, doc, setDoc }         from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged,
+         signInWithEmailAndPassword }        from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAnt0izxpGlF_uc47lEgwYaPQSDH4EkEAE",
+  authDomain:        "orion-panel-59dab.firebaseapp.com",
+  projectId:         "orion-panel-59dab",
+  storageBucket:     "orion-panel-59dab.firebasestorage.app",
+  messagingSenderId: "322169536252",
+  appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
 
-// Email del administrador principal (vos)
+// ⚠️ Reemplazá con el email exacto que creaste en Firebase Auth
 const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
-// ══════════════════════════════════════
 
-let db, auth;
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-try {
-  firebase.initializeApp(FIREBASE_CONFIG);
-  db   = firebase.firestore();
-  auth = firebase.auth();
-
-  if (FIREBASE_CONFIG.apiKey === 'TU_API_KEY') {
-    document.getElementById('fb-dot').className   = 'fb-dot err';
-    document.getElementById('fb-label').textContent = 'Firebase sin configurar';
-    document.getElementById('setup-banner').style.display = 'block';
-  } else {
-    // Verificar conexión real
-    db.collection('_ping').doc('check').set({ ts: Date.now() }).then(() => {
-      document.getElementById('fb-dot').className   = 'fb-dot ok';
+// Verificar conexión Firebase (sin await suelto)
+function verificarConexion() {
+  setDoc(doc(db, '_ping', 'check'), { ts: Date.now() })
+    .then(() => {
+      document.getElementById('fb-dot').className     = 'fb-dot ok';
       document.getElementById('fb-label').textContent = 'Firebase conectado';
-    }).catch(() => {
-      document.getElementById('fb-dot').className   = 'fb-dot err';
+    })
+    .catch(() => {
+      document.getElementById('fb-dot').className     = 'fb-dot err';
       document.getElementById('fb-label').textContent = 'Error de conexión';
     });
-  }
-} catch(e) {
-  document.getElementById('fb-dot').className   = 'fb-dot err';
-  document.getElementById('fb-label').textContent = 'Error de inicialización';
 }
+verificarConexion();
 
-// Sesión activa → ir directo al panel
-firebase.auth().onAuthStateChanged(user => {
+// Si ya hay sesión activa → ir directo al panel
+onAuthStateChanged(auth, user => {
   if (user && user.email === ADMIN_EMAIL) {
     window.location.href = 'super-panel.html';
+  } else {
+    // Mostrar login (ya visible por defecto)
   }
 });
 
+// Login
 async function doLogin() {
-  const email = document.getElementById('inp-email').value.trim();
-  const pass  = document.getElementById('inp-pass').value.trim();
-  const errEl = document.getElementById('err-msg');
-  errEl.style.display = 'none';
+  const email = document.getElementById('inp-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('inp-pass').value;
+  document.getElementById('err-msg').style.display = 'none';
 
   if (!email || !pass) { showErr('Completá email y contraseña.'); return; }
-  if (email !== ADMIN_EMAIL) { showErr('Email no autorizado.'); return; }
+  if (email !== ADMIN_EMAIL.toLowerCase()) { showErr('Email no autorizado.'); return; }
 
   setLoading(true);
   try {
-    await firebase.auth().signInWithEmailAndPassword(email, pass);
-    // onAuthStateChanged se encarga del redirect
+    await signInWithEmailAndPassword(auth, email, pass);
+    // onAuthStateChanged redirige automáticamente
   } catch(e) {
     const msgs = {
-      'auth/wrong-password':    'Contraseña incorrecta.',
-      'auth/user-not-found':    'Usuario no encontrado.',
-      'auth/invalid-email':     'Email inválido.',
-      'auth/too-many-requests': 'Demasiados intentos. Esperá unos minutos.',
+      'auth/wrong-password':         'Contraseña incorrecta.',
+      'auth/invalid-credential':     'Email o contraseña incorrectos.',
+      'auth/user-not-found':         'Usuario no encontrado en Firebase.',
+      'auth/invalid-email':          'Email inválido.',
+      'auth/too-many-requests':      'Demasiados intentos. Esperá unos minutos.',
       'auth/network-request-failed': 'Sin conexión a internet.',
     };
-    showErr(msgs[e.code] || 'Error: ' + e.message);
+    showErr(msgs[e.code] || ('Error ' + e.code));
+    setLoading(false);
   }
-  setLoading(false);
 }
+window.doLogin = doLogin;
 
 function showErr(msg) {
   const el = document.getElementById('err-msg');
-  el.textContent = msg; el.style.display = 'block';
+  el.textContent = msg;
+  el.style.display = 'block';
 }
 function setLoading(on) {
-  document.getElementById('spin').style.display  = on ? 'block' : 'none';
+  document.getElementById('spin').style.display    = on ? 'block' : 'none';
   document.getElementById('btn-label').textContent = on ? 'Verificando...' : 'ACCEDER →';
-  document.getElementById('btn-login').disabled  = on;
+  document.getElementById('btn-login').disabled    = on;
+}
+
+// Registrar Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
 </body>
