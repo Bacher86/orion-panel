@@ -15,16 +15,18 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#08090a;--surface:#0f1114;--card:#161a1f;--border:#1e2329;
+  --bg:#08090a;--card:#161a1f;--border:#1e2329;
   --accent:#e8ff47;--accent2:#47c5ff;--accent3:#ff6b47;
   --text:#f0f2f5;--muted:#5a6270;--muted2:#3a404a;
   --font-head:'Syne',sans-serif;--font-mono:'Space Mono',monospace;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-head);overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.6}
-body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;opacity:.4}
-
-/* ─── APP SHELL ─── */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;opacity:.3}
+#loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.load-logo{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.3em}
+.load-bar{width:200px;height:2px;background:var(--border);overflow:hidden}
+.load-fill{height:100%;background:var(--accent);animation:load 1.5s ease-in-out infinite}
+@keyframes load{0%{width:0;margin-left:0}50%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
 #app{display:flex;height:100vh;flex-direction:column}
 header{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;border-bottom:1px solid var(--border);position:relative;z-index:10;background:var(--bg)}
 .header-logo{font-size:11px;font-family:var(--font-mono);color:var(--accent);letter-spacing:.3em}
@@ -32,17 +34,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 3
 .header-user{font-family:var(--font-mono);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px}
 .dot-live{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.btn-logout{font-family:var(--font-mono);font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:.2em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--border);transition:all .15s}
+.btn-logout{font-family:var(--font-mono);font-size:9px;color:var(--muted);background:none;border:1px solid var(--border);cursor:pointer;letter-spacing:.2em;text-transform:uppercase;padding:6px 10px;transition:all .15s}
 .btn-logout:hover{border-color:var(--accent3);color:var(--accent3)}
-
-/* ─── LOADING SCREEN ─── */
-#loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
-.load-logo{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.3em}
-.load-bar{width:200px;height:2px;background:var(--border);overflow:hidden}
-.load-fill{height:100%;background:var(--accent);animation:load 1.5s ease-in-out infinite}
-@keyframes load{0%{width:0;margin-left:0}50%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
-
-/* ─── LAYOUT ─── */
 .shell{display:flex;flex:1;overflow:hidden}
 nav{width:220px;border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;gap:2px;flex-shrink:0;background:var(--bg)}
 .nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--muted);cursor:pointer;transition:all .15s;border-left:2px solid transparent;text-transform:uppercase}
@@ -52,28 +45,17 @@ nav{width:220px;border-right:1px solid var(--border);padding:24px 0;display:flex
 .nav-section{font-family:var(--font-mono);font-size:8px;letter-spacing:.3em;color:var(--muted2);padding:20px 24px 8px;text-transform:uppercase}
 nav .spacer{flex:1}
 .nav-version{font-family:var(--font-mono);font-size:9px;color:var(--muted2);padding:16px 24px}
-
 main{flex:1;overflow-y:auto;padding:40px}
-
-/* ─── SECTIONS ─── */
 .section{display:none}.section.active{display:block}
-
-/* ─── PAGE HEADER ─── */
 .page-header{margin-bottom:40px}
 .page-eyebrow{font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px}
 .page-title{font-size:36px;font-weight:800;line-height:1}
 .page-sub{font-size:13px;color:var(--muted);margin-top:8px}
-
-/* ─── STATS ─── */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
-.stat-box{background:var(--card);border:1px solid var(--border);padding:24px;position:relative;overflow:hidden}
-.stat-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.stat-box:hover::after{transform:scaleX(1)}
+.stat-box{background:var(--card);border:1px solid var(--border);padding:24px}
 .stat-n{font-size:40px;font-weight:800;line-height:1;margin-bottom:4px}
 .stat-l{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
 .stat-accent{color:var(--accent)}.stat-accent2{color:var(--accent2)}.stat-accent3{color:var(--accent3)}
-
-/* ─── TABLE ─── */
 .table-wrap{background:var(--card);border:1px solid var(--border);overflow:hidden;margin-bottom:32px}
 .table-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
 .table-title{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
@@ -88,15 +70,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .badge-warning{background:rgba(255,107,71,.1);color:var(--accent3);border:1px solid rgba(255,107,71,.3)}
 .badge-expired{background:rgba(90,98,112,.1);color:var(--muted);border:1px solid var(--border)}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-.school-avatar{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg);flex-shrink:0}
 .school-info{display:flex;align-items:center;gap:12px}
+.school-avatar{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg);flex-shrink:0}
 .school-name{font-weight:800;font-size:13px}
 .school-url{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:2px}
 .action-btn{font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;padding:6px 12px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text);transition:all .15s;text-transform:uppercase;margin-right:4px}
 .action-btn:hover{border-color:var(--accent);color:var(--accent)}
 .action-btn.danger:hover{border-color:var(--accent3);color:var(--accent3)}
-
-/* ─── FORM ─── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .form-grid.col3{grid-template-columns:1fr 1fr 1fr}
 .form-group{display:flex;flex-direction:column;gap:8px}
@@ -111,124 +91,99 @@ select.form-input{cursor:pointer}
 .form-section{font-family:var(--font-mono);font-size:9px;letter-spacing:.3em;color:var(--accent);text-transform:uppercase;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .color-row{display:flex;gap:12px;align-items:center}
 input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border);background:var(--bg);cursor:pointer}
-
-/* ─── BUTTONS ─── */
-.btn-row{display:flex;gap:12px;margin-top:32px;align-items:center}
+.btn-row{display:flex;gap:12px;margin-top:32px;align-items:center;flex-wrap:wrap}
 .btn-primary{background:var(--accent);color:#000;border:none;padding:14px 28px;font-family:var(--font-head);font-weight:800;font-size:12px;letter-spacing:.08em;cursor:pointer;transition:opacity .2s;text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .btn-primary:hover{opacity:.85}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed}
-.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:14px 28px;font-family:var(--font-head);font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:14px 28px;font-family:var(--font-head);font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .btn-secondary:hover{border-color:var(--text)}
-
-/* ─── CARD ─── */
 .card{background:var(--card);border:1px solid var(--border);padding:28px;margin-bottom:20px}
 .card-title{font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
 .card-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:20px}
-
-/* ─── DEPLOY RESULT ─── */
 .deploy-result{background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);padding:24px;margin-top:24px;display:none}
 .deploy-url{font-family:var(--font-mono);font-size:13px;color:var(--accent);word-break:break-all;margin:12px 0}
 .deploy-steps{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:16px}
 .deploy-steps li{font-family:var(--font-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:10px}
 .deploy-steps li::before{content:'✓';color:var(--accent);font-weight:700}
-
-/* ─── CALENDAR ─── */
 .calendar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.cal-card{background:var(--card);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden}
+.cal-card{background:var(--card);border:1px solid var(--border);padding:20px;position:relative}
 .cal-card.expiring{border-color:rgba(255,107,71,.4)}
 .cal-card.expired{opacity:.5}
 .cal-school{font-weight:800;font-size:14px;margin-bottom:4px}
 .cal-date{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:12px}
 .cal-bar-bg{background:var(--border);height:4px;border-radius:2px;overflow:hidden;margin-bottom:8px}
-.cal-bar-fill{height:4px;border-radius:2px;background:var(--accent);transition:width .5s}
+.cal-bar-fill{height:4px;border-radius:2px;background:var(--accent)}
 .cal-bar-fill.warning{background:var(--accent3)}
-.cal-days{font-family:var(--font-mono);font-size:9px;color:var(--muted);display:flex;justify-content:space-between}
+.cal-days{font-family:var(--font-mono);font-size:9px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
 .cal-renew{position:absolute;top:16px;right:16px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;padding:5px 10px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;text-transform:uppercase;transition:all .15s}
 .cal-renew:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ─── LOG ─── */
 .log-entry{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start}
 .log-time{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;margin-top:2px;min-width:130px}
 .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
 .log-msg{font-size:12px;line-height:1.5}
 .log-tag{font-family:var(--font-mono);font-size:9px;padding:2px 8px;border:1px solid var(--border);margin-left:8px;color:var(--muted)}
-
-/* ─── TOAST ─── */
 .toast{position:fixed;bottom:32px;right:32px;background:var(--card);border:1px solid var(--border);padding:16px 20px;font-family:var(--font-mono);font-size:11px;z-index:10000;transform:translateY(100px);opacity:0;transition:all .3s;max-width:340px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{border-color:rgba(232,255,71,.4);color:var(--accent)}
 .toast.error{border-color:rgba(255,107,71,.4);color:var(--accent3)}
-
-/* ─── SPINNER ─── */
 .spinner{width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ─── MODAL ─── */
 .modal-overlay{position:fixed;inset:0;background:rgba(8,9,10,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--card);border:1px solid var(--border);padding:36px;width:100%;max-width:480px}
 .modal-title{font-size:20px;font-weight:800;margin-bottom:8px}
 .modal-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:28px}
 .modal-actions{display:flex;gap:12px;margin-top:24px}
-
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border)}
 </style>
 </head>
 <body>
 
-<!-- ── LOADING ── -->
 <div id="loading-screen">
   <div class="load-logo">◈ ORION — cargando</div>
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
 
-<!-- ── APP ── -->
 <div id="app" style="display:none">
   <header>
     <div class="header-logo">◈ ORION SYSTEM</div>
     <div class="header-right">
       <div class="header-user"><div class="dot-live"></div><span id="hdr-email">—</span></div>
-      <button class="btn-logout" onclick="doLogout()">SALIR</button>
+      <button class="btn-logout" id="btn-salir">SALIR</button>
     </div>
   </header>
   <div class="shell">
     <nav>
       <div class="nav-section">Principal</div>
-      <div class="nav-item active" onclick="goTo('dashboard')"><span class="nav-icon">▦</span>Dashboard</div>
-      <div class="nav-item" onclick="goTo('nueva')"><span class="nav-icon">+</span>Nueva escuela</div>
+      <div class="nav-item active" data-sec="dashboard"><span class="nav-icon">▦</span>Dashboard</div>
+      <div class="nav-item" data-sec="nueva"><span class="nav-icon">+</span>Nueva escuela</div>
       <div class="nav-section">Gestión</div>
-      <div class="nav-item" onclick="goTo('escuelas')"><span class="nav-icon">◉</span>Escuelas activas</div>
-      <div class="nav-item" onclick="goTo('calendario')"><span class="nav-icon">◫</span>Licencias</div>
-      <div class="nav-item" onclick="goTo('log')"><span class="nav-icon">≡</span>Log de deploys</div>
+      <div class="nav-item" data-sec="escuelas"><span class="nav-icon">◉</span>Escuelas activas</div>
+      <div class="nav-item" data-sec="calendario"><span class="nav-icon">◫</span>Licencias</div>
+      <div class="nav-item" data-sec="log"><span class="nav-icon">≡</span>Log</div>
       <div class="nav-section">Config</div>
-      <div class="nav-item" onclick="goTo('config')"><span class="nav-icon">⚙</span>Configuración</div>
+      <div class="nav-item" data-sec="config"><span class="nav-icon">⚙</span>Configuración</div>
       <div class="spacer"></div>
       <div class="nav-version">ORION v1.0 // 2026</div>
     </nav>
     <main>
 
-      <!-- ── DASHBOARD ── -->
       <section id="s-dashboard" class="section active">
         <div class="page-header">
           <div class="page-eyebrow">// overview</div>
           <h1 class="page-title">Dashboard</h1>
-          <p class="page-sub">Estado general de todas las instalaciones activas.</p>
+          <p class="page-sub">Estado general de todas las instalaciones.</p>
         </div>
         <div class="stats-row">
-          <div class="stat-box"><div class="stat-n stat-accent" id="d-total">—</div><div class="stat-l">Escuelas totales</div></div>
+          <div class="stat-box"><div class="stat-n stat-accent" id="d-total">—</div><div class="stat-l">Totales</div></div>
           <div class="stat-box"><div class="stat-n stat-accent2" id="d-activas">—</div><div class="stat-l">Activas</div></div>
-          <div class="stat-box"><div class="stat-n stat-accent3" id="d-por-vencer">—</div><div class="stat-l">Por vencer (30d)</div></div>
+          <div class="stat-box"><div class="stat-n stat-accent3" id="d-por-vencer">—</div><div class="stat-l">Por vencer</div></div>
           <div class="stat-box"><div class="stat-n" id="d-vencidas">—</div><div class="stat-l">Vencidas</div></div>
         </div>
         <div class="table-wrap">
-          <div class="table-head">
-            <span class="table-title">Instalaciones recientes</span>
-            <button class="action-btn" onclick="goTo('nueva')">+ Nueva</button>
-          </div>
-          <table>
-            <thead><tr><th>Escuela</th><th>Asistente IA</th><th>URL</th><th>Licencia</th><th>Estado</th></tr></thead>
-            <tbody id="d-table-body"><tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody>
-          </table>
+          <div class="table-head"><span class="table-title">Instalaciones recientes</span><button class="action-btn" id="btn-nueva-dash">+ Nueva</button></div>
+          <table><thead><tr><th>Escuela</th><th>Asistente IA</th><th>URL</th><th>Licencia</th><th>Estado</th></tr></thead>
+          <tbody id="d-table-body"><tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-title">Actividad reciente</div>
@@ -237,25 +192,22 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         </div>
       </section>
 
-      <!-- ── NUEVA ESCUELA ── -->
       <section id="s-nueva" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// deploy</div>
           <h1 class="page-title">Nueva escuela</h1>
-          <p class="page-sub">Completá los datos y el sistema genera la app automáticamente.</p>
+          <p class="page-sub">Completá los datos y generá la app automáticamente.</p>
         </div>
-
         <div class="card">
           <div class="card-title">GitHub</div>
           <div class="card-sub">Token y cuenta para crear el repositorio</div>
           <div class="form-grid">
-            <div class="form-group"><label class="form-label">GitHub Token (PAT)</label><input type="password" class="form-input" id="n-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"><span class="form-hint">Se guarda en Firebase, no en tu browser</span></div>
-            <div class="form-group"><label class="form-label">Usuario / Org de GitHub</label><input type="text" class="form-input" id="n-gh-user" placeholder="tu-usuario-github"></div>
+            <div class="form-group"><label class="form-label">GitHub Token (PAT)</label><input type="password" class="form-input" id="n-gh-token" placeholder="ghp_..."></div>
+            <div class="form-group"><label class="form-label">Usuario GitHub</label><input type="text" class="form-input" id="n-gh-user" placeholder="tu-usuario"></div>
             <div class="form-group"><label class="form-label">Repo template</label><input type="text" class="form-input" id="n-gh-template-repo" placeholder="app-template"></div>
-            <div class="form-group"><label class="form-label">Nombre del nuevo repo</label><input type="text" class="form-input" id="n-gh-repo" placeholder="app-colegio-sanmartin" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'-')"></div>
+            <div class="form-group"><label class="form-label">Nombre del nuevo repo</label><input type="text" class="form-input" id="n-gh-repo" placeholder="app-colegio-x"></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-title">Datos de la escuela</div>
           <div class="card-sub">Se inyectan automáticamente en el código</div>
@@ -269,12 +221,11 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           </div>
           <div class="form-section">Colores institucionales</div>
           <div class="form-grid col3">
-            <div class="form-group"><label class="form-label">Color primario</label><div class="color-row"><input type="color" id="n-color1" value="#6c47ff"><input type="text" class="form-input" id="n-color1-hex" value="#6c47ff" style="flex:1" oninput="document.getElementById('n-color1').value=this.value"></div></div>
-            <div class="form-group"><label class="form-label">Color secundario</label><div class="color-row"><input type="color" id="n-color2" value="#a855f7"><input type="text" class="form-input" id="n-color2-hex" value="#a855f7" style="flex:1" oninput="document.getElementById('n-color2').value=this.value"></div></div>
-            <div class="form-group"><label class="form-label">Color acento</label><div class="color-row"><input type="color" id="n-color3" value="#f59e0b"><input type="text" class="form-input" id="n-color3-hex" value="#f59e0b" style="flex:1" oninput="document.getElementById('n-color3').value=this.value"></div></div>
+            <div class="form-group"><label class="form-label">Color primario</label><div class="color-row"><input type="color" id="n-color1" value="#6c47ff"><input type="text" class="form-input" id="n-color1-hex" value="#6c47ff" style="flex:1"></div></div>
+            <div class="form-group"><label class="form-label">Color secundario</label><div class="color-row"><input type="color" id="n-color2" value="#a855f7"><input type="text" class="form-input" id="n-color2-hex" value="#a855f7" style="flex:1"></div></div>
+            <div class="form-group"><label class="form-label">Color acento</label><div class="color-row"><input type="color" id="n-color3" value="#f59e0b"><input type="text" class="form-input" id="n-color3-hex" value="#f59e0b" style="flex:1"></div></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-title">Firebase — Base de datos de la escuela</div>
           <div class="card-sub">Proyecto Firebase exclusivo para esta institución</div>
@@ -287,7 +238,6 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
             <div class="form-group"><label class="form-label">appId</label><input type="text" class="form-input" id="fb-appid" placeholder="1:123:web:abc123"></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-title">Licencia</div>
           <div class="card-sub">Período de uso contratado</div>
@@ -299,41 +249,24 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
             <div class="form-group full"><label class="form-label">Notas internas</label><textarea class="form-input" id="n-notas" placeholder="Contacto, acuerdos especiales..."></textarea></div>
           </div>
         </div>
-
         <div class="btn-row">
-          <button class="btn-primary" onclick="deployEscuela()" id="btn-deploy">
-            <span class="spinner" id="deploy-spinner"></span>
-            <span id="deploy-label">⚡ GENERAR Y DEPLOYAR</span>
-          </button>
-          <button class="btn-secondary" onclick="registrarSinDeploy()" id="btn-registrar" style="border-color:#47c5ff;color:#47c5ff">
-            <span class="spinner" id="reg-spinner"></span>
-            <span id="reg-label">📋 SOLO REGISTRAR</span>
-          </button>
-          <button class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+          <button class="btn-primary" id="btn-deploy"><span class="spinner" id="deploy-spinner"></span><span id="deploy-label">⚡ GENERAR Y DEPLOYAR</span></button>
+          <button class="btn-secondary" id="btn-registrar" style="border-color:#47c5ff;color:#47c5ff"><span class="spinner" id="reg-spinner"></span><span id="reg-label">📋 SOLO REGISTRAR</span></button>
+          <button class="btn-secondary" id="btn-limpiar">Limpiar</button>
           <span id="deploy-status" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:8px"></span>
         </div>
-
         <div class="deploy-result" id="deploy-result">
           <div style="font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px">// deploy completado</div>
           <div style="font-size:20px;font-weight:800;margin-bottom:8px">App generada ✓</div>
           <div class="deploy-url" id="deploy-url-display"></div>
-          <ul class="deploy-steps">
-            <li>Repositorio creado en GitHub</li>
-            <li>Archivos copiados y configurados</li>
-            <li>Firebase config inyectada</li>
-            <li>Colores y nombre del asistente actualizados</li>
-            <li>GitHub Pages activado</li>
-            <li>Licencia guardada en Firebase ORION</li>
-          </ul>
+          <ul class="deploy-steps"><li>Repositorio creado en GitHub</li><li>Archivos configurados</li><li>Firebase config inyectada</li><li>GitHub Pages activado</li><li>Licencia guardada en Firebase</li></ul>
           <div style="margin-top:16px;display:flex;gap:12px">
-            <button class="btn-primary" onclick="window.open(document.getElementById('deploy-url-display').textContent,'_blank')">Abrir app →</button>
-            <button class="btn-secondary" onclick="window.open(document.getElementById('deploy-repo-url').textContent,'_blank')">Ver repo</button>
+            <button class="btn-primary" id="btn-abrir-app">Abrir app →</button>
+            <button class="btn-secondary" id="btn-ver-repo">Ver repo</button>
           </div>
-          <div id="deploy-repo-url" style="display:none"></div>
         </div>
       </section>
 
-      <!-- ── ESCUELAS ── -->
       <section id="s-escuelas" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// instalaciones</div>
@@ -341,15 +274,12 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
           <p class="page-sub">Todas las instancias desplegadas.</p>
         </div>
         <div class="table-wrap">
-          <div class="table-head"><span class="table-title">Listado completo</span><button class="action-btn" onclick="goTo('nueva')">+ Nueva</button></div>
-          <table>
-            <thead><tr><th>Escuela</th><th>Asistente IA</th><th>Plan</th><th>Vencimiento</th><th>URL</th><th>Acciones</th></tr></thead>
-            <tbody id="e-table-body"><tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody>
-          </table>
+          <div class="table-head"><span class="table-title">Listado completo</span><button class="action-btn" id="btn-nueva-esc">+ Nueva</button></div>
+          <table><thead><tr><th>Escuela</th><th>Asistente IA</th><th>Plan</th><th>Vencimiento</th><th>URL</th><th>Acciones</th></tr></thead>
+          <tbody id="e-table-body"><tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Cargando...</td></tr></tbody></table>
         </div>
       </section>
 
-      <!-- ── LICENCIAS ── -->
       <section id="s-calendario" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// licencias</div>
@@ -359,17 +289,15 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         <div class="calendar-grid" id="cal-grid"><div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Cargando...</div></div>
       </section>
 
-      <!-- ── LOG ── -->
       <section id="s-log" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// sistema</div>
           <h1 class="page-title">Log de deploys</h1>
-          <p class="page-sub">Historial completo de todas las operaciones.</p>
+          <p class="page-sub">Historial completo de operaciones.</p>
         </div>
         <div class="card"><div id="log-list" style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Cargando...</div></div>
       </section>
 
-      <!-- ── CONFIG ── -->
       <section id="s-config" class="section">
         <div class="page-header">
           <div class="page-eyebrow">// sistema</div>
@@ -377,19 +305,19 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
         </div>
         <div class="card">
           <div class="card-title">GitHub defaults</div>
-          <div class="card-sub">Se guardan en Firebase, disponibles desde cualquier dispositivo</div>
+          <div class="card-sub">Se guardan en Firebase — disponibles desde cualquier dispositivo</div>
           <div class="form-grid">
-            <div class="form-group"><label class="form-label">GitHub Token por defecto</label><input type="password" class="form-input" id="cfg-gh-token" placeholder="ghp_..."></div>
+            <div class="form-group"><label class="form-label">GitHub Token</label><input type="password" class="form-input" id="cfg-gh-token" placeholder="ghp_..."></div>
             <div class="form-group"><label class="form-label">Usuario GitHub</label><input type="text" class="form-input" id="cfg-gh-user" placeholder="tu-usuario"></div>
             <div class="form-group"><label class="form-label">Repo template</label><input type="text" class="form-input" id="cfg-gh-template" placeholder="app-template"></div>
           </div>
-          <div class="btn-row"><button class="btn-primary" onclick="guardarConfigGH()">GUARDAR EN FIREBASE</button></div>
+          <div class="btn-row"><button class="btn-primary" id="btn-guardar-cfg">GUARDAR EN FIREBASE</button></div>
         </div>
         <div class="card">
           <div class="card-title">Exportar datos</div>
           <div class="card-sub">Backup completo de escuelas y logs</div>
           <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:16px" id="cfg-data-info">—</div>
-          <button class="btn-secondary" onclick="exportarDatos()">EXPORTAR JSON</button>
+          <button class="btn-secondary" id="btn-exportar">EXPORTAR JSON</button>
         </div>
       </section>
 
@@ -397,16 +325,15 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
   </div>
 </div>
 
-<!-- Modal renovar -->
 <div class="modal-overlay" id="modal-renovar">
   <div class="modal-box">
     <div class="modal-title">Renovar licencia</div>
     <p class="modal-sub" id="modal-ren-nombre">—</p>
     <div class="form-group" style="margin-bottom:16px"><label class="form-label">Nueva fecha de vencimiento</label><input type="date" class="form-input" id="modal-ren-fecha"></div>
-    <div class="form-group"><label class="form-label">Nota de renovación</label><input type="text" class="form-input" id="modal-ren-nota" placeholder="Pago recibido, renovación 2027..."></div>
+    <div class="form-group"><label class="form-label">Nota</label><input type="text" class="form-input" id="modal-ren-nota" placeholder="Pago recibido..."></div>
     <div class="modal-actions">
-      <button class="btn-primary" onclick="confirmarRenovacion()">CONFIRMAR</button>
-      <button class="btn-secondary" onclick="document.getElementById('modal-renovar').classList.remove('open')">Cancelar</button>
+      <button class="btn-primary" id="btn-confirmar-ren">CONFIRMAR</button>
+      <button class="btn-secondary" id="btn-cancelar-ren">Cancelar</button>
     </div>
   </div>
 </div>
@@ -414,15 +341,15 @@ input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--border
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { initializeApp }                                      from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getFirestore, collection, doc,
-         addDoc, setDoc, updateDoc, deleteDoc,
-         getDoc, getDocs, orderBy, query,
-         limit, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut }               from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { initializeApp }                         from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc,
+         setDoc, updateDoc, deleteDoc, getDoc,
+         getDocs, orderBy, query, limit,
+         serverTimestamp, arrayUnion }           from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut }  from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
-// ── Config ORION ──
-const firebaseConfig = {
+// ── CONFIG ──
+const FB_CONFIG = {
   apiKey:            "AIzaSyAnt0izxpGlF_uc47lEgwYaPQSDH4EkEAE",
   authDomain:        "orion-panel-59dab.firebaseapp.com",
   projectId:         "orion-panel-59dab",
@@ -430,451 +357,325 @@ const firebaseConfig = {
   messagingSenderId: "322169536252",
   appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
-const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email
+const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email exacto
 
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const auth = getAuth(app);
+const fbApp = initializeApp(FB_CONFIG);
+const db    = getFirestore(fbApp);
+const auth  = getAuth(fbApp);
 
-// ── Auth guard ──
+// ── FIRESTORE ──
+const C = { ESC:'orion_escuelas', LOG:'orion_logs', CFG:'orion_config' };
+
+const getEsc = async () => {
+  try { const s=await getDocs(query(collection(db,C.ESC),orderBy('creadoEn','desc'))); return s.docs.map(d=>({id:d.id,...d.data()})); }
+  catch(e) { console.warn('getEsc',e); return []; }
+};
+const addEsc = async data => { data.creadoEn=serverTimestamp(); return (await addDoc(collection(db,C.ESC),data)).id; };
+const updEsc = async (id,data) => updateDoc(doc(db,C.ESC,id),data);
+const delEsc = async id => deleteDoc(doc(db,C.ESC,id));
+const getLogs = async () => {
+  try { const s=await getDocs(query(collection(db,C.LOG),orderBy('fecha','desc'),limit(100))); return s.docs.map(d=>d.data()); }
+  catch(e) { console.warn('getLogs',e); return []; }
+};
+const addLog = async (msg,tipo='info',escuela='') => {
+  try { await addDoc(collection(db,C.LOG),{msg,tipo,escuela,fecha:serverTimestamp()}); } catch {}
+};
+const getCfg = async () => {
+  try { const s=await getDoc(doc(db,C.CFG,'principal')); return s.exists()?s.data(){}; }
+  catch(e) { console.warn('getCfg',e); return {}; }
+};
+const setCfg = async data => setDoc(doc(db,C.CFG,'principal'),data,{merge:true});
+
+// ── AUTH ──
 onAuthStateChanged(auth, async user => {
-  if (!user || user.email !== ADMIN_EMAIL) {
-    window.location.href = 'index.html'; return;
+  if (!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    window.location.href = 'index.html';
+    return;
   }
   document.getElementById('hdr-email').textContent = user.email;
-  try {
-    await initApp();
-  } catch(e) {
-    console.error('initApp error:', e);
-    // Mostrar igual aunque falle algo
-  }
+  await boot();
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
 });
 
-// ══════════════════════════════════════
-// DB HELPERS — Firestore modular
-// ══════════════════════════════════════
-const COL_ESC = 'orion_escuelas';
-const COL_LOG = 'orion_logs';
-const COL_CFG = 'orion_config';
+// ── BOOT ──
+async function boot() {
+  // Fechas
+  const hoy=new Date().toISOString().split('T')[0];
+  document.getElementById('n-lic-inicio').value=hoy;
+  const fin=new Date();fin.setFullYear(fin.getFullYear()+1);
+  document.getElementById('n-lic-fin').value=fin.toISOString().split('T')[0];
 
-async function dbGetEscuelas() {
-  const q    = query(collection(db, COL_ESC), orderBy('creadoEn','desc'));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
-async function dbAddEscuela(data) {
-  data.creadoEn = serverTimestamp();
-  const ref = await addDoc(collection(db, COL_ESC), data);
-  return ref.id;
-}
-async function dbUpdateEscuela(id, data) {
-  await updateDoc(doc(db, COL_ESC, id), data);
-}
-async function dbDeleteEscuela(id) {
-  await deleteDoc(doc(db, COL_ESC, id));
-}
-async function dbGetLogs() {
-  const q    = query(collection(db, COL_LOG), orderBy('fecha','desc'), limit(100));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => d.data());
-}
-async function dbAddLog(msg, tipo='info', escuela='') {
-  await addDoc(collection(db, COL_LOG), { msg, tipo, escuela, fecha: serverTimestamp() });
-}
-async function dbGetConfig() {
-  const snap = await getDoc(doc(db, COL_CFG, 'principal'));
-  return snap.exists() ? snap.data() : {};
-}
-async function dbSetConfig(data) {
-  await setDoc(doc(db, COL_CFG, 'principal'), data, { merge: true });
-}
+  // Config GitHub
+  const cfg=await getCfg();
+  if(cfg.ghToken)    document.getElementById('n-gh-token').value=cfg.ghToken;
+  if(cfg.ghUser)     document.getElementById('n-gh-user').value=cfg.ghUser;
+  if(cfg.ghTemplate) document.getElementById('n-gh-template-repo').value=cfg.ghTemplate;
 
-// ══════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════
-async function doLogout() {
-  await signOut(auth);
-  window.location.href = 'index.html';
-}
-window.doLogout = doLogout;
-
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
-async function initApp() {
-  // Fechas por defecto
-  const hoy = new Date().toISOString().split('T')[0];
-  document.getElementById('n-lic-inicio').value = hoy;
-  const fin = new Date(); fin.setFullYear(fin.getFullYear()+1);
-  document.getElementById('n-lic-fin').value = fin.toISOString().split('T')[0];
-  // Cargar config de GitHub (no bloquea si falla)
-  try {
-    const cfg = await dbGetConfig();
-    if (cfg.ghToken)    document.getElementById('n-gh-token').value = cfg.ghToken;
-    if (cfg.ghUser)     document.getElementById('n-gh-user').value  = cfg.ghUser;
-    if (cfg.ghTemplate) document.getElementById('n-gh-template-repo').value = cfg.ghTemplate;
-  } catch(e) { console.warn('Config no disponible:', e.message); }
-  // Sync color pickers
-  ['n-color1','n-color2','n-color3'].forEach(id => {
-    document.getElementById(id).addEventListener('input', e => {
-      document.getElementById(id+'-hex').value = e.target.value;
-    });
+  // Color pickers
+  ['n-color1','n-color2','n-color3'].forEach(id=>{
+    document.getElementById(id).oninput=e=>document.getElementById(id+'-hex').value=e.target.value;
+    document.getElementById(id+'-hex').oninput=e=>document.getElementById(id).value=e.target.value;
   });
-  // Cargar dashboard (no bloquea si falla)
-  try { await renderDashboard(); } catch(e) { console.warn('Dashboard error:', e.message); }
+
+  // Botones estáticos
+  document.getElementById('btn-salir').onclick=()=>signOut(auth).then(()=>location.href='index.html');
+  document.getElementById('btn-deploy').onclick=deployEscuela;
+  document.getElementById('btn-registrar').onclick=registrarSinDeploy;
+  document.getElementById('btn-limpiar').onclick=limpiarForm;
+  document.getElementById('btn-guardar-cfg').onclick=guardarCfg;
+  document.getElementById('btn-exportar').onclick=exportarDatos;
+  document.getElementById('btn-confirmar-ren').onclick=confirmarRenovacion;
+  document.getElementById('btn-cancelar-ren').onclick=()=>document.getElementById('modal-renovar').classList.remove('open');
+  document.getElementById('btn-nueva-dash').onclick=()=>goTo('nueva');
+  document.getElementById('btn-nueva-esc').onclick=()=>goTo('nueva');
+
+  // Nav
+  document.querySelectorAll('.nav-item[data-sec]').forEach(el=>el.onclick=()=>goTo(el.dataset.sec));
+
+  await renderDashboard();
 }
 
-// ══════════════════════════════════════
-// NAV
-// ══════════════════════════════════════
-function goTo(sec) {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelector(`[onclick="goTo('${sec}')"]`).classList.add('active');
+// ── NAV ──
+async function goTo(sec) {
+  document.querySelectorAll('.nav-item[data-sec]').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const nav=document.querySelector(`[data-sec="${sec}"]`);
+  if(nav)nav.classList.add('active');
   document.getElementById('s-'+sec).classList.add('active');
-  if(sec==='dashboard') renderDashboard();
-  if(sec==='escuelas')  renderEscuelas();
-  if(sec==='calendario')renderCalendario();
-  if(sec==='log')       renderLog();
-  if(sec==='config')    renderConfig();
+  if(sec==='dashboard')  await renderDashboard();
+  if(sec==='escuelas')   await renderEscuelas();
+  if(sec==='calendario') await renderCalendario();
+  if(sec==='log')        await renderLog();
+  if(sec==='config')     await renderConfig();
 }
 
-// ══════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════
+// ── DASHBOARD ──
 async function renderDashboard() {
-  const esc = await dbGetEscuelas();
-  const ahora = Date.now();
-  const activas    = esc.filter(e => toMs(e.licFin) > ahora);
-  const porVencer  = activas.filter(e => toMs(e.licFin) - ahora < 30*86400000);
-  const vencidas   = esc.filter(e => toMs(e.licFin) <= ahora);
-  document.getElementById('d-total').textContent     = esc.length;
-  document.getElementById('d-activas').textContent   = activas.length;
-  document.getElementById('d-por-vencer').textContent= porVencer.length;
-  document.getElementById('d-vencidas').textContent  = vencidas.length;
-  const tbody = document.getElementById('d-table-body');
-  if (!esc.length) { tbody.innerHTML='<tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr>'; }
-  else tbody.innerHTML = esc.slice(0,5).map(e=>`
+  const esc=await getEsc(), now=Date.now();
+  const act=esc.filter(e=>ms(e.licFin)>now);
+  const pv=act.filter(e=>ms(e.licFin)-now<30*864e5);
+  const ven=esc.filter(e=>ms(e.licFin)<=now);
+  setText('d-total',esc.length);setText('d-activas',act.length);setText('d-por-vencer',pv.length);setText('d-vencidas',ven.length);
+  const tb=document.getElementById('d-table-body');
+  tb.innerHTML=esc.length?esc.slice(0,5).map(e=>`
     <tr>
-      <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.repoUser}/${e.repoNombre}</div></div></div></td>
-      <td style="font-weight:700">${e.iosi}</td>
+      <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.repoUser||''}/${e.repoNombre||''}</div></div></div></td>
+      <td style="font-weight:700">${e.iosi||'—'}</td>
       <td>${e.url?`<a href="${e.url}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--accent2)">Ver ↗</a>`:'—'}</td>
       <td style="font-family:var(--font-mono);font-size:11px">${e.licFin||'—'}</td>
-      <td>${getBadge(e)}</td>
-    </tr>`).join('');
-  // Log reciente
-  const logs = await dbGetLogs();
-  document.getElementById('d-log-reciente').innerHTML = logs.length
-    ? logs.slice(0,4).map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px"><span style="color:var(--muted);min-width:130px;font-size:10px">${fmtFecha(l.fecha)}</span><span style="font-size:12px">${l.msg}</span></div>`).join('')
-    : 'Sin actividad.';
+      <td>${bdg(e)}</td>
+    </tr>`).join('')
+    :'<tr><td colspan="5" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones aún.</td></tr>';
+  const logs=await getLogs();
+  document.getElementById('d-log-reciente').innerHTML=logs.length
+    ?logs.slice(0,4).map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px"><span style="color:var(--muted);min-width:130px;font-size:10px">${fmt(l.fecha)}</span><span style="font-size:12px">${l.msg}</span></div>`).join('')
+    :'Sin actividad registrada.';
 }
 
-// ══════════════════════════════════════
-// ESCUELAS
-// ══════════════════════════════════════
+// ── ESCUELAS ──
 async function renderEscuelas() {
-  const esc = await dbGetEscuelas();
-  const tbody = document.getElementById('e-table-body');
-  if (!esc.length) { tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones.</td></tr>'; return; }
-  tbody.innerHTML = esc.map(e=>`
+  const esc=await getEsc();
+  const tb=document.getElementById('e-table-body');
+  if(!esc.length){tb.innerHTML='<tr><td colspan="6" style="color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:32px">Sin instalaciones.</td></tr>';return;}
+  tb.innerHTML=esc.map(e=>`
     <tr>
-      <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.adminEmail}</div></div></div></td>
-      <td style="font-weight:700">${e.iosi}</td>
+      <td><div class="school-info"><div class="school-avatar">${e.emoji||'🏫'}</div><div><div class="school-name">${e.nombre}</div><div class="school-url">${e.adminEmail||''}</div></div></div></td>
+      <td style="font-weight:700">${e.iosi||'—'}</td>
       <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--accent2);text-transform:uppercase">${e.plan||'estándar'}</span></td>
       <td style="font-family:var(--font-mono);font-size:11px">${e.licFin||'—'}</td>
       <td>${e.url?`<a href="${e.url}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--accent)">↗ ${e.url.replace('https://','')}</a>`:'—'}</td>
       <td>
-        <button class="action-btn" onclick="abrirRenovar('${e.id}','${e.nombre}','${e.licFin||''}')">Renovar</button>
-        <button class="action-btn danger" onclick="eliminarEscuela('${e.id}','${e.nombre}')">Eliminar</button>
+        <button class="action-btn" data-id="${e.id}" data-nombre="${e.nombre}" data-fin="${e.licFin||''}" data-action="ren">Renovar</button>
+        <button class="action-btn danger" data-id="${e.id}" data-nombre="${e.nombre}" data-action="del">Eliminar</button>
       </td>
     </tr>`).join('');
+  tb.querySelectorAll('[data-action]').forEach(btn=>btn.onclick=()=>{
+    if(btn.dataset.action==='ren') abrirRenovar(btn.dataset.id,btn.dataset.nombre,btn.dataset.fin);
+    if(btn.dataset.action==='del') eliminarEsc(btn.dataset.id,btn.dataset.nombre);
+  });
+}
+async function eliminarEsc(id,nombre){
+  if(!confirm(`¿Eliminar "${nombre}"?`))return;
+  await delEsc(id);await addLog(`Eliminada: ${nombre}`,'warn',nombre);
+  toast('Eliminada.');await renderEscuelas();await renderDashboard();
 }
 
-async function eliminarEscuela(id, nombre) {
-  if (!confirm(`¿Eliminar "${nombre}" del panel? El repo de GitHub no se borra.`)) return;
-  await dbDeleteEscuela(id);
-  await dbAddLog(`Escuela eliminada del panel: ${nombre}`, 'warn', nombre);
-  toast('Escuela eliminada.'); renderEscuelas(); renderDashboard();
-}
-
-// ══════════════════════════════════════
-// CALENDARIO
-// ══════════════════════════════════════
+// ── LICENCIAS ──
 async function renderCalendario() {
-  const esc = await dbGetEscuelas();
-  const grid = document.getElementById('cal-grid');
-  if (!esc.length) { grid.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin licencias.</div>'; return; }
-  const ahora = Date.now();
-  grid.innerHTML = esc.map(e => {
-    const inicio = toMs(e.licInicio), fin = toMs(e.licFin);
-    const pct = Math.max(0, Math.min(100, Math.round((ahora-inicio)/(fin-inicio)*100)));
-    const dias = Math.max(0, Math.round((fin-ahora)/86400000));
-    const expiring = (fin-ahora)<30*86400000 && fin>ahora;
-    const expired  = fin<=ahora;
-    return `<div class="cal-card ${expiring?'expiring':''} ${expired?'expired':''}">
-      <button class="cal-renew" onclick="abrirRenovar('${e.id}','${e.nombre}','${e.licFin||''}')">Renovar</button>
+  const esc=await getEsc(),grid=document.getElementById('cal-grid'),now=Date.now();
+  if(!esc.length){grid.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin licencias.</div>';return;}
+  grid.innerHTML=esc.map(e=>{
+    const ini=ms(e.licInicio),fin=ms(e.licFin);
+    const pct=fin>ini?Math.max(0,Math.min(100,Math.round((now-ini)/(fin-ini)*100))):0;
+    const dias=Math.max(0,Math.round((fin-now)/864e5));
+    const exp=(fin-now)<30*864e5&&fin>now,venc=fin<=now;
+    return`<div class="cal-card ${exp?'expiring':''} ${venc?'expired':''}">
+      <button class="cal-renew" data-id="${e.id}" data-nombre="${e.nombre}" data-fin="${e.licFin||''}">Renovar</button>
       <div class="cal-school">${e.emoji||'🏫'} ${e.nombre}</div>
       <div class="cal-date">${e.licInicio||'—'} → ${e.licFin||'—'}</div>
-      <div class="cal-bar-bg"><div class="cal-bar-fill ${expiring||expired?'warning':''}" style="width:${pct}%"></div></div>
-      <div class="cal-days"><span>${getBadge(e)}</span><span>${expired?'Vencida':dias+' días'}</span></div>
+      <div class="cal-bar-bg"><div class="cal-bar-fill ${exp||venc?'warning':''}" style="width:${pct}%"></div></div>
+      <div class="cal-days"><span>${bdg(e)}</span><span>${venc?'Vencida':dias+' días'}</span></div>
     </div>`;
   }).join('');
+  grid.querySelectorAll('.cal-renew').forEach(btn=>btn.onclick=()=>abrirRenovar(btn.dataset.id,btn.dataset.nombre,btn.dataset.fin));
 }
 
-let renovandoId = null;
-function abrirRenovar(id, nombre, licFin) {
-  renovandoId = id;
-  document.getElementById('modal-ren-nombre').textContent = nombre;
-  const nueva = licFin ? new Date(licFin) : new Date();
-  nueva.setFullYear(nueva.getFullYear()+1);
-  document.getElementById('modal-ren-fecha').value = nueva.toISOString().split('T')[0];
-  document.getElementById('modal-ren-nota').value = '';
+let renId=null;
+function abrirRenovar(id,nombre,fin){
+  renId=id;
+  document.getElementById('modal-ren-nombre').textContent=nombre;
+  const d=fin?new Date(fin):new Date();d.setFullYear(d.getFullYear()+1);
+  document.getElementById('modal-ren-fecha').value=d.toISOString().split('T')[0];
+  document.getElementById('modal-ren-nota').value='';
   document.getElementById('modal-renovar').classList.add('open');
 }
-async function confirmarRenovacion() {
-  const nuevaFin = document.getElementById('modal-ren-fecha').value;
-  const nota     = document.getElementById('modal-ren-nota').value;
-  await dbUpdateEscuela(renovandoId, {
-    licFin: nuevaFin,
-    renovaciones: arrayUnion({ fecha: new Date().toISOString(), nuevaFin, nota })
-  });
-  await dbAddLog(`Licencia renovada hasta ${nuevaFin}`, 'success');
+async function confirmarRenovacion(){
+  const nf=document.getElementById('modal-ren-fecha').value,nota=document.getElementById('modal-ren-nota').value;
+  await updEsc(renId,{licFin:nf,renovaciones:arrayUnion({fecha:new Date().toISOString(),nf,nota})});
+  await addLog(`Licencia renovada hasta ${nf}`,'success');
   document.getElementById('modal-renovar').classList.remove('open');
-  toast('Licencia renovada ✓', 'success');
-  renderCalendario(); renderDashboard();
+  toast('Licencia renovada ✓','success');
+  await renderCalendario();await renderDashboard();
 }
 
-// ══════════════════════════════════════
-// LOG
-// ══════════════════════════════════════
-async function renderLog() {
-  const logs = await dbGetLogs();
-  const cont = document.getElementById('log-list');
-  if (!logs.length) { cont.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Sin registros.</div>'; return; }
-  cont.innerHTML = logs.map(l => {
-    const col = l.tipo==='success'?'var(--accent)':l.tipo==='error'?'var(--accent3)':l.tipo==='warn'?'#f59e0b':'var(--accent2)';
-    return `<div class="log-entry"><span class="log-time">${fmtFecha(l.fecha)}</span><div class="log-dot" style="background:${col}"></div><div class="log-msg">${l.msg}${l.escuela?`<span class="log-tag">${l.escuela}</span>`:''}</div></div>`;
+// ── LOG ──
+async function renderLog(){
+  const logs=await getLogs(),cont=document.getElementById('log-list');
+  if(!logs.length){cont.innerHTML='<div style="color:var(--muted)">Sin registros.</div>';return;}
+  cont.innerHTML=logs.map(l=>{
+    const col=l.tipo==='success'?'var(--accent)':l.tipo==='error'?'var(--accent3)':l.tipo==='warn'?'#f59e0b':'var(--accent2)';
+    return`<div class="log-entry"><span class="log-time">${fmt(l.fecha)}</span><div class="log-dot" style="background:${col}"></div><div class="log-msg">${l.msg}${l.escuela?`<span class="log-tag">${l.escuela}</span>`:''}</div></div>`;
   }).join('');
 }
 
-// ══════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════
-async function renderConfig() {
-  const cfg = await dbGetConfig();
-  if (cfg.ghToken)    document.getElementById('cfg-gh-token').value    = cfg.ghToken;
-  if (cfg.ghUser)     document.getElementById('cfg-gh-user').value     = cfg.ghUser;
-  if (cfg.ghTemplate) document.getElementById('cfg-gh-template').value = cfg.ghTemplate;
-  const esc = await dbGetEscuelas();
-  document.getElementById('cfg-data-info').textContent = `${esc.length} escuelas en Firebase`;
+// ── CONFIG ──
+async function renderConfig(){
+  const cfg=await getCfg();
+  if(cfg.ghToken)    document.getElementById('cfg-gh-token').value=cfg.ghToken;
+  if(cfg.ghUser)     document.getElementById('cfg-gh-user').value=cfg.ghUser;
+  if(cfg.ghTemplate) document.getElementById('cfg-gh-template').value=cfg.ghTemplate;
+  const esc=await getEsc();
+  document.getElementById('cfg-data-info').textContent=`${esc.length} escuelas en Firebase`;
 }
-async function guardarConfigGH() {
-  const data = {
-    ghToken:    document.getElementById('cfg-gh-token').value,
-    ghUser:     document.getElementById('cfg-gh-user').value,
-    ghTemplate: document.getElementById('cfg-gh-template').value,
-  };
-  await dbSetConfig(data);
-  // También pre-llenar en el form de nueva escuela
-  document.getElementById('n-gh-token').value          = data.ghToken;
-  document.getElementById('n-gh-user').value           = data.ghUser;
-  document.getElementById('n-gh-template-repo').value  = data.ghTemplate;
-  toast('Config guardada en Firebase ✓', 'success');
+async function guardarCfg(){
+  const d={ghToken:document.getElementById('cfg-gh-token').value,ghUser:document.getElementById('cfg-gh-user').value,ghTemplate:document.getElementById('cfg-gh-template').value};
+  await setCfg(d);
+  document.getElementById('n-gh-token').value=d.ghToken;
+  document.getElementById('n-gh-user').value=d.ghUser;
+  document.getElementById('n-gh-template-repo').value=d.ghTemplate;
+  toast('Config guardada ✓','success');
 }
-async function exportarDatos() {
-  const esc  = await dbGetEscuelas();
-  const logs = await dbGetLogs();
-  const blob = new Blob([JSON.stringify({escuelas:esc,logs,fecha:new Date().toISOString()},null,2)],{type:'application/json'});
-  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='orion-backup-'+new Date().toISOString().split('T')[0]+'.json'; a.click();
-  toast('Datos exportados ✓','success');
+async function exportarDatos(){
+  const esc=await getEsc(),logs=await getLogs();
+  const blob=new Blob([JSON.stringify({escuelas:esc,logs,fecha:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='orion-backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();
+  toast('Exportado ✓','success');
 }
 
-// ══════════════════════════════════════
-// DEPLOY — GitHub API
-// ══════════════════════════════════════
-async function registrarSinDeploy() {
-  const nombre=v('n-nombre'),iosi=v('n-iosi'),adminEmail=v('n-admin-email');
-  const logo=v('n-logo'),emoji=v('n-emoji')||'🏫';
-  const color1=v('n-color1-hex'),color2=v('n-color2-hex'),color3=v('n-color3-hex');
-  const fbKey=v('fb-key'),fbProject=v('fb-project');
-  const licInicio=v('n-lic-inicio'),licFin=v('n-lic-fin'),plan=v('n-plan'),precio=v('n-precio'),notas=v('n-notas');
-  const ghUser=v('n-gh-user'),newRepo=v('n-gh-repo');
-  if(!nombre){toast('Falta el nombre de la escuela.','error');return;}
-  if(!iosi){toast('Falta el nombre del asistente IA.','error');return;}
-  document.getElementById('reg-spinner').style.display='block';
-  document.getElementById('reg-label').textContent='Guardando...';
-  document.getElementById('btn-registrar').disabled=true;
+// ── REGISTRAR SIN DEPLOY ──
+async function registrarSinDeploy(){
+  const nombre=v('n-nombre'),iosi=v('n-iosi');
+  if(!nombre){toast('Falta nombre de escuela.','error');return;}
+  if(!iosi){toast('Falta nombre del asistente IA.','error');return;}
+  const sp=document.getElementById('reg-spinner'),lb=document.getElementById('reg-label'),btn=document.getElementById('btn-registrar');
+  sp.style.display='block';lb.textContent='Guardando...';btn.disabled=true;
+  const gu=v('n-gh-user'),gr=v('n-gh-repo');
   try{
-    const appUrl = ghUser&&newRepo ? `https://${ghUser}.github.io/${newRepo}` : v('n-logo')||'';
-    const repoUrl= ghUser&&newRepo ? `https://github.com/${ghUser}/${newRepo}` : '';
-    await dbAddEscuela({nombre,iosi,adminEmail,logo,emoji,color1,color2,color3,
-      repoUser:ghUser,repoNombre:newRepo,plan,precio,licInicio,licFin,notas,
-      url: ghUser&&newRepo?`https://${ghUser}.github.io/${newRepo}`:'',
-      repoUrl,registradoSinDeploy:true});
-    await dbAddLog(`Escuela registrada manualmente: ${nombre}`,'success',nombre);
-    toast(`✓ ${nombre} registrada en el panel`,'success');
-    limpiarFormulario();
-    goTo('escuelas');
-  }catch(e){
-    toast('Error al guardar: '+e.message,'error');
-  }
-  document.getElementById('reg-spinner').style.display='none';
-  document.getElementById('reg-label').textContent='📋 SOLO REGISTRAR';
-  document.getElementById('btn-registrar').disabled=false;
+    await addEsc({nombre,iosi,adminEmail:v('n-admin-email'),logo:v('n-logo'),emoji:v('n-emoji')||'🏫',
+      color1:v('n-color1-hex'),color2:v('n-color2-hex'),color3:v('n-color3-hex'),
+      repoUser:gu,repoNombre:gr,plan:v('n-plan'),precio:v('n-precio'),
+      licInicio:v('n-lic-inicio'),licFin:v('n-lic-fin'),notas:v('n-notas'),
+      url:gu&&gr?`https://${gu}.github.io/${gr}`:'',
+      repoUrl:gu&&gr?`https://github.com/${gu}/${gr}`:'',
+      registradoSinDeploy:true});
+    await addLog(`Registrada manualmente: ${nombre}`,'success',nombre);
+    toast(`✓ ${nombre} registrada`,'success');
+    limpiarForm();await goTo('escuelas');
+  }catch(e){toast('Error: '+e.message,'error');}
+  sp.style.display='none';lb.textContent='📋 SOLO REGISTRAR';btn.disabled=false;
 }
-  const ghToken=v('n-gh-token'),ghUser=v('n-gh-user'),templateRepo=v('n-gh-template-repo'),newRepo=v('n-gh-repo');
-  const nombre=v('n-nombre'),iosi=v('n-iosi'),adminEmail=v('n-admin-email'),adminPass=v('n-admin-pass');
-  const logo=v('n-logo'),emoji=v('n-emoji')||'🏫';
-  const color1=v('n-color1-hex'),color2=v('n-color2-hex'),color3=v('n-color3-hex');
-  const fbKey=v('fb-key'),fbAuth=v('fb-auth'),fbProject=v('fb-project'),fbStorage=v('fb-storage'),fbSender=v('fb-sender'),fbAppId=v('fb-appid');
-  const licInicio=v('n-lic-inicio'),licFin=v('n-lic-fin'),plan=v('n-plan'),precio=v('n-precio'),notas=v('n-notas');
-  const req=[['GitHub Token',ghToken],['Usuario GitHub',ghUser],['Repo template',templateRepo],['Nombre repo nuevo',newRepo],['Nombre escuela',nombre],['Asistente IA',iosi],['Email admin',adminEmail],['Firebase apiKey',fbKey],['Firebase projectId',fbProject]];
+
+// ── DEPLOY ──
+async function deployEscuela(){
+  const gt=v('n-gh-token'),gu=v('n-gh-user'),tmpl=v('n-gh-template-repo'),gr=v('n-gh-repo');
+  const nombre=v('n-nombre'),iosi=v('n-iosi'),ae=v('n-admin-email'),ap=v('n-admin-pass');
+  const logo=v('n-logo'),emoji=v('n-emoji')||'🏫',c1=v('n-color1-hex'),c2=v('n-color2-hex'),c3=v('n-color3-hex');
+  const fk=v('fb-key'),fa=v('fb-auth'),fp=v('fb-project'),fs=v('fb-storage'),fn=v('fb-sender'),fi=v('fb-appid');
+  const li=v('n-lic-inicio'),lf=v('n-lic-fin'),plan=v('n-plan'),precio=v('n-precio'),notas=v('n-notas');
+  const req=[['GitHub Token',gt],['Usuario GitHub',gu],['Repo template',tmpl],['Nombre repo',gr],['Nombre escuela',nombre],['Asistente IA',iosi],['Email admin',ae],['Firebase apiKey',fk],['Firebase projectId',fp]];
   for(const[l,val]of req){if(!val){toast(`Falta: ${l}`,'error');return;}}
-  setDeployLoading(true);
-  const status=document.getElementById('deploy-status');
+  const dsp=document.getElementById('deploy-spinner'),dlb=document.getElementById('deploy-label'),dbtn=document.getElementById('btn-deploy'),dstat=document.getElementById('deploy-status');
+  dsp.style.display='block';dlb.textContent='Desplegando...';dbtn.disabled=true;document.getElementById('deploy-result').style.display='none';
   try{
-    status.textContent='Verificando token...';
-    await verificarToken(ghToken,ghUser);
-    status.textContent='Obteniendo template...';
-    const archivos=await obtenerArchivosTemplate(ghToken,ghUser,templateRepo);
-    status.textContent='Creando repositorio...';
-    await crearRepo(ghToken,ghUser,newRepo,nombre);
-    status.textContent='Subiendo archivos configurados...';
-    await subirArchivos(ghToken,ghUser,newRepo,nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass,archivos);
-    status.textContent='Activando GitHub Pages...';
-    await activarPages(ghToken,ghUser,newRepo);
-    const appUrl=`https://${ghUser}.github.io/${newRepo}`;
-    const repoUrl=`https://github.com/${ghUser}/${newRepo}`;
-    const escData={nombre,iosi,adminEmail,logo,emoji,color1,color2,color3,repoUser:ghUser,repoNombre:newRepo,plan,precio,licInicio,licFin,notas,url:appUrl,repoUrl};
-    await dbAddEscuela(escData);
-    await dbAddLog(`Deploy exitoso: ${nombre} → ${appUrl}`,'success',nombre);
-    document.getElementById('deploy-url-display').textContent=appUrl;
-    document.getElementById('deploy-repo-url').textContent=repoUrl;
+    dstat.textContent='Verificando token...';
+    if(!(await ghF(`https://api.github.com/users/${gu}`,gt)).ok)throw new Error('Token inválido.');
+    dstat.textContent='Obteniendo template...';
+    const tr=await ghF(`https://api.github.com/repos/${gu}/${tmpl}/git/trees/HEAD?recursive=1`,gt);
+    if(!tr.ok)throw new Error('No se pudo acceder al repo template.');
+    const td=await tr.json(),archs=[];
+    for(const it of td.tree.filter(t=>t.type==='blob')){
+      const fr=await ghF(`https://api.github.com/repos/${gu}/${tmpl}/contents/${it.path}`,gt);
+      if(fr.ok){const fd=await fr.json();archs.push({path:it.path,content:fd.content});}
+    }
+    dstat.textContent='Creando repositorio...';
+    const cr=await ghF('https://api.github.com/user/repos',gt,'POST',{name:gr,description:`App — ${nombre}`,private:false,auto_init:false});
+    if(!cr.ok){const ce=await cr.json();throw new Error(ce.message||'Error creando repo.');}
+    await sleep(2000);
+    dstat.textContent='Subiendo archivos...';
+    for(const arch of archs){
+      let txt;try{txt=decodeURIComponent(escape(atob(arch.content.replace(/\n/g,''))));}catch{txt=atob(arch.content.replace(/\n/g,''));}
+      txt=inj(txt,{nombre,iosi,logo,emoji,c1,c2,c3,fk,fa,fp,fs,fn,fi,ae,ap});
+      const b64=btoa(unescape(encodeURIComponent(txt)));
+      const ur=await ghF(`https://api.github.com/repos/${gu}/${gr}/contents/${arch.path}`,gt,'PUT',{message:`Init: ${arch.path}`,content:b64});
+      if(!ur.ok){const ue=await ur.json();if(!ue.message?.includes('already exists'))throw new Error(`Error subiendo ${arch.path}`);}
+      await sleep(100);
+    }
+    dstat.textContent='Activando GitHub Pages...';
+    await sleep(3000);
+    await ghF(`https://api.github.com/repos/${gu}/${gr}/pages`,gt,'POST',{source:{branch:'main',path:'/'}});
+    const url=`https://${gu}.github.io/${gr}`,repo=`https://github.com/${gu}/${gr}`;
+    await addEsc({nombre,iosi,adminEmail:ae,logo,emoji,color1:c1,color2:c2,color3:c3,repoUser:gu,repoNombre:gr,plan,precio,licInicio:li,licFin:lf,notas,url,repoUrl:repo});
+    await addLog(`Deploy exitoso: ${nombre} → ${url}`,'success',nombre);
+    document.getElementById('deploy-url-display').textContent=url;
+    document.getElementById('btn-abrir-app').onclick=()=>window.open(url,'_blank');
+    document.getElementById('btn-ver-repo').onclick=()=>window.open(repo,'_blank');
     document.getElementById('deploy-result').style.display='block';
-    status.textContent='';
-    toast('¡App desplegada exitosamente! ✓','success');
-  } catch(e) {
-    toast('Error: '+e.message,'error');
-    await dbAddLog(`Error de deploy: ${e.message}`,'error',nombre);
-    status.textContent='Error: '+e.message;
-  }
-  setDeployLoading(false);
+    dstat.textContent='';toast('¡App desplegada! ✓','success');
+  }catch(e){toast('Error: '+e.message,'error');await addLog(`Error deploy: ${e.message}`,'error',nombre);dstat.textContent='Error: '+e.message;}
+  dsp.style.display='none';dlb.textContent='⚡ GENERAR Y DEPLOYAR';dbtn.disabled=false;
 }
 
-async function verificarToken(token,user){
-  const r=await ghFetch(`https://api.github.com/users/${user}`,token);
-  if(!r.ok)throw new Error('Token inválido o usuario no encontrado.');
+function inj(t,{nombre,iosi,logo,emoji,c1,c2,c3,fk,fa,fp,fs,fn,fi,ae,ap}){
+  const fb=`{apiKey:"${fk}",authDomain:"${fa}",projectId:"${fp}",storageBucket:"${fs}",messagingSenderId:"${fn}",appId:"${fi}"}`;
+  t=t.replace(/{apiKey:"AIzaSy[^}]+"[^}]+}/g,fb);
+  t=t.replace(/Instituto Iosef Caro/g,nombre).replace(/Iosef Caro/g,nombre).replace(/app-iosefcaro/g,fp);
+  t=t.replace(/\bIosi\b/g,iosi).replace(/\biosi\b/g,iosi.toLowerCase()).replace(/IOSI/g,iosi.toUpperCase());
+  t=t.replace(/uriel\.bacher@gmail\.com/g,ae).replace(/Gallardo10/g,ap);
+  if(logo)t=t.replace(/src="[^"]*logo[^"]*"/g,`src="${logo}"`);
+  t=t.replace(/#6c47ff/gi,c1).replace(/#a855f7/gi,c2).replace(/#f59e0b/gi,c3);
+  t=t.replace(/🏫/g,emoji);return t;
 }
-async function obtenerArchivosTemplate(token,user,repo){
-  const r=await ghFetch(`https://api.github.com/repos/${user}/${repo}/git/trees/HEAD?recursive=1`,token);
-  if(!r.ok)throw new Error('No se pudo acceder al repo template.');
-  const data=await r.json();
-  const archivos=[];
-  for(const item of data.tree.filter(t=>t.type==='blob'&&!t.path.includes('node_modules'))){
-    const fr=await ghFetch(`https://api.github.com/repos/${user}/${repo}/contents/${item.path}`,token);
-    if(fr.ok){const fd=await fr.json();archivos.push({path:item.path,content:fd.content});}
-  }
-  return archivos;
+async function ghF(url,tk,method='GET',body=null){
+  const o={method,headers:{'Authorization':'token '+tk,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}};
+  if(body)o.body=JSON.stringify(body);return fetch(url,o);
 }
-async function crearRepo(token,user,newRepo,nombre){
-  const r=await ghFetch(`https://api.github.com/user/repos`,token,'POST',{name:newRepo,description:`App institucional — ${nombre}`,private:false,auto_init:false});
-  if(!r.ok){const e=await r.json();throw new Error(e.message||'No se pudo crear el repo.');}
-  await sleep(2000);
-}
-async function subirArchivos(token,user,newRepo,nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass,archivos){
-  if(!archivos?.length)throw new Error('No se obtuvieron archivos del template.');
-  for(const arch of archivos){
-    let texto;
-    try{texto=decodeURIComponent(escape(atob(arch.content.replace(/\n/g,''))));}
-    catch{texto=atob(arch.content.replace(/\n/g,''));}
-    texto=inyectarValores(texto,{nombre,iosi,logo,emoji,color1,color2,color3,fbKey,fbAuth,fbProject,fbStorage,fbSender,fbAppId,adminEmail,adminPass});
-    const b64=btoa(unescape(encodeURIComponent(texto)));
-    const r=await ghFetch(`https://api.github.com/repos/${user}/${newRepo}/contents/${arch.path}`,token,'PUT',{message:`Init: ${arch.path}`,content:b64});
-    if(!r.ok){const e=await r.json();if(e.message&&!e.message.includes('already exists'))throw new Error(`Error subiendo ${arch.path}: ${e.message}`);}
-    await sleep(150);
-  }
-}
-async function activarPages(token,user,repo){
-  await sleep(3000);
-  await ghFetch(`https://api.github.com/repos/${user}/${repo}/pages`,token,'POST',{source:{branch:'main',path:'/'}});
-}
-function inyectarValores(texto,cfg){
-  const fbConfig=`{apiKey:"${cfg.fbKey}",authDomain:"${cfg.fbAuth}",projectId:"${cfg.fbProject}",storageBucket:"${cfg.fbStorage}",messagingSenderId:"${cfg.fbSender}",appId:"${cfg.fbAppId}"}`;
-  texto=texto.replace(/{apiKey:"AIzaSy[^}]+"[^}]+}/g,fbConfig);
-  texto=texto.replace(/Instituto Iosef Caro/g,cfg.nombre);
-  texto=texto.replace(/Iosef Caro/g,cfg.nombre);
-  texto=texto.replace(/app-iosefcaro/g,cfg.fbProject);
-  texto=texto.replace(/\bIosi\b/g,cfg.iosi);
-  texto=texto.replace(/\biosi\b/g,cfg.iosi.toLowerCase());
-  texto=texto.replace(/IOSI/g,cfg.iosi.toUpperCase());
-  texto=texto.replace(/uriel\.bacher@gmail\.com/g,cfg.adminEmail);
-  texto=texto.replace(/Gallardo10/g,cfg.adminPass);
-  if(cfg.logo)texto=texto.replace(/src="[^"]*logo[^"]*"/g,`src="${cfg.logo}"`);
-  texto=texto.replace(/#6c47ff/gi,cfg.color1);
-  texto=texto.replace(/#a855f7/gi,cfg.color2);
-  texto=texto.replace(/#f59e0b/gi,cfg.color3);
-  texto=texto.replace(/🏫/g,cfg.emoji||'🏫');
-  return texto;
-}
-async function ghFetch(url,token,method='GET',body=null){
-  const opts={method,headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}};
-  if(body)opts.body=JSON.stringify(body);
-  return fetch(url,opts);
-}
-function setDeployLoading(on){
-  document.getElementById('deploy-spinner').style.display=on?'block':'none';
-  document.getElementById('deploy-label').textContent=on?'Desplegando...':'⚡ GENERAR Y DEPLOYAR';
-  document.getElementById('btn-deploy').disabled=on;
-  if(on)document.getElementById('deploy-result').style.display='none';
-}
-function limpiarFormulario(){
+function limpiarForm(){
   ['n-nombre','n-iosi','n-admin-email','n-admin-pass','n-logo','n-emoji','n-gh-repo','fb-key','fb-auth','fb-project','fb-storage','fb-sender','fb-appid','n-notas','n-precio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('deploy-result').style.display='none';
   document.getElementById('deploy-status').textContent='';
 }
 
-// ══════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════
-function v(id){return(document.getElementById(id)?.value||'').trim();}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function toMs(val){if(!val)return 0;if(val?.seconds)return val.seconds*1000;return new Date(val).getTime();}
-function fmtFecha(val){
-  if(!val)return'—';
-  const d=val?.seconds?new Date(val.seconds*1000):new Date(val);
-  try{return d.toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return String(val);}
-}
-function getBadge(e){
-  const ahora=Date.now();const fin=toMs(e.licFin);
-  if(fin<=ahora)return'<span class="badge badge-expired"><span class="badge-dot"></span>Vencida</span>';
-  if(fin-ahora<30*86400000)return'<span class="badge badge-warning"><span class="badge-dot"></span>Por vencer</span>';
-  return'<span class="badge badge-active"><span class="badge-dot"></span>Activa</span>';
-}
-function toast(msg,tipo='info'){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast show'+(tipo==='success'?' success':tipo==='error'?' error':'');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);
-}
+// ── UTILS ──
+const v=id=>(document.getElementById(id)?.value||'').trim();
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const setText=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+const ms=val=>{if(!val)return 0;if(val?.seconds)return val.seconds*1000;if(typeof val==='string')return new Date(val).getTime();return 0;};
+const fmt=val=>{if(!val)return'—';try{const d=val?.seconds?new Date(val.seconds*1000):new Date(val);return d.toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return'—';}};
+const bdg=e=>{const now=Date.now(),fin=ms(e.licFin);if(fin<=now)return'<span class="badge badge-expired"><span class="badge-dot"></span>Vencida</span>';if(fin-now<30*864e5)return'<span class="badge badge-warning"><span class="badge-dot"></span>Por vencer</span>';return'<span class="badge badge-active"><span class="badge-dot"></span>Activa</span>';};
+function toast(msg,tipo='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(tipo==='success'?' success':tipo==='error'?' error':'');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);}
 
-// Exponer todas las funciones al scope global para los onclick del HTML
-window.goTo                = goTo;
-window.deployEscuela       = deployEscuela;
-window.limpiarFormulario   = limpiarFormulario;
-window.registrarSinDeploy  = registrarSinDeploy;
-window.eliminarEscuela     = eliminarEscuela;
-window.abrirRenovar        = abrirRenovar;
-window.confirmarRenovacion = confirmarRenovacion;
-window.guardarConfigGH     = guardarConfigGH;
-window.exportarDatos       = exportarDatos;
-window.doLogout            = doLogout;
-
-// Registrar Service Worker para PWA
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
