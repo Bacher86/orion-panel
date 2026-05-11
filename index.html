@@ -6,7 +6,7 @@
 <title>ORION — Acceso</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#08090a">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ORION">
 <link rel="apple-touch-icon" href="icon-512.png">
@@ -21,53 +21,53 @@
   --font:'Syne',sans-serif;--mono:'Space Mono',monospace;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden}
-
+ 
 /* Grid bg */
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#1e232910 1px,transparent 1px),linear-gradient(90deg,#1e232910 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
-
+ 
 /* Glow orbs */
 .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;animation:drift 12s ease-in-out infinite}
 .orb1{width:600px;height:600px;background:rgba(232,255,71,.04);top:-200px;left:-200px;animation-delay:0s}
 .orb2{width:400px;height:400px;background:rgba(71,197,255,.04);bottom:-100px;right:-100px;animation-delay:-6s}
 @keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
-
+ 
 /* Center layout */
 .wrap{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-
+ 
 /* Logo bar */
 .logo-bar{display:flex;align-items:center;gap:12px;margin-bottom:64px}
 .logo-mark{width:40px;height:40px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent)}
 .logo-text{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:.3em;text-transform:uppercase}
-
+ 
 /* Card */
 .card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--border);padding:48px 40px;position:relative;overflow:hidden}
 .card::before{content:'◈';position:absolute;font-size:200px;font-weight:800;color:var(--accent);opacity:.03;right:-40px;bottom:-60px;pointer-events:none;line-height:1;font-family:var(--font)}
-
+ 
 .eyebrow{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.3em;text-transform:uppercase;margin-bottom:16px}
 .title{font-size:36px;font-weight:800;line-height:1;margin-bottom:6px}
 .sub{font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:40px}
-
+ 
 .field{margin-bottom:20px}
 .field label{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
 .field input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:14px 16px;font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
 .field input:focus{border-color:var(--accent)}
 .field input::placeholder{color:#3a404a}
-
+ 
 .btn{width:100%;background:var(--accent);color:#000;border:none;padding:16px;font-family:var(--font);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px}
 .btn:hover{opacity:.85}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn .spinner{width:14px;height:14px;border:2px solid transparent;border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+ 
 .err{font-family:var(--mono);font-size:11px;color:var(--accent3);margin-top:14px;display:none;padding:10px 14px;border:1px solid rgba(255,107,71,.3);background:rgba(255,107,71,.05)}
-
+ 
 /* Status de Firebase */
 .fb-status{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em;display:flex;align-items:center;gap:8px}
 .fb-dot{width:5px;height:5px;border-radius:50%;background:var(--muted)}
 .fb-dot.ok{background:var(--accent);animation:pulse 2s infinite}
 .fb-dot.err{background:var(--accent3)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
+ 
 /* Setup banner */
 .setup-banner{width:100%;max-width:400px;margin-top:20px;background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);padding:16px 20px;display:none}
 .setup-banner p{font-family:var(--mono);font-size:10px;color:var(--accent);line-height:1.7}
@@ -77,18 +77,18 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#
 <body>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
-
+ 
 <div class="wrap">
   <div class="logo-bar">
     <div class="logo-mark">◈</div>
     <div class="logo-text">Sistema de gestión · v1.0</div>
   </div>
-
+ 
   <div class="card">
     <div class="eyebrow">// acceso restringido</div>
     <h1 class="title">ORION<br>Super Panel</h1>
     <p class="sub">Plataforma de gestión de instalaciones educativas</p>
-
+ 
     <div class="field">
       <label>Email</label>
       <input type="email" id="inp-email" placeholder="admin@tudominio.com" autocomplete="email">
@@ -97,32 +97,32 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(#
       <label>Contraseña</label>
       <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-
+ 
     <button class="btn" id="btn-login" onclick="doLogin()">
       <span class="spinner" id="spin"></span>
       <span id="btn-label">ACCEDER →</span>
     </button>
     <div class="err" id="err-msg"></div>
   </div>
-
+ 
   <div class="setup-banner" id="setup-banner">
     <p>⚠️ Firebase no configurado.<br>
     Editá index.html y super-panel.html con tu config de Firebase.<br>
     <a onclick="document.getElementById('setup-banner').style.display='none'">Entendido</a></p>
   </div>
 </div>
-
+ 
 <div class="fb-status">
   <div class="fb-dot" id="fb-dot"></div>
   <span id="fb-label">Conectando...</span>
 </div>
-
+ 
 <script type="module">
 import { initializeApp }                     from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getFirestore, doc, setDoc }         from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged,
          signInWithEmailAndPassword }        from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-
+ 
 const firebaseConfig = {
   apiKey:            "AIzaSyAnt0izxpGlF_uc47lEgwYaPQSDH4EkEAE",
   authDomain:        "orion-panel-59dab.firebaseapp.com",
@@ -131,14 +131,14 @@ const firebaseConfig = {
   messagingSenderId: "322169536252",
   appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
-
+ 
 // ⚠️ Reemplazá con el email exacto que creaste en Firebase Auth
-const ADMIN_EMAIL = "uriel.bacher@gmail.com";
-
+const ADMIN_EMAIL = "TU_EMAIL@gmail.com";
+ 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
-
+ 
 // Verificar conexión Firebase (sin await suelto)
 function verificarConexion() {
   setDoc(doc(db, '_ping', 'check'), { ts: Date.now() })
@@ -152,7 +152,7 @@ function verificarConexion() {
     });
 }
 verificarConexion();
-
+ 
 // Si ya hay sesión activa → ir directo al panel
 onAuthStateChanged(auth, user => {
   if (user && user.email === ADMIN_EMAIL) {
@@ -161,16 +161,16 @@ onAuthStateChanged(auth, user => {
     // Mostrar login (ya visible por defecto)
   }
 });
-
+ 
 // Login
 async function doLogin() {
   const email = document.getElementById('inp-email').value.trim().toLowerCase();
   const pass  = document.getElementById('inp-pass').value;
   document.getElementById('err-msg').style.display = 'none';
-
+ 
   if (!email || !pass) { showErr('Completá email y contraseña.'); return; }
   if (email !== ADMIN_EMAIL.toLowerCase()) { showErr('Email no autorizado.'); return; }
-
+ 
   setLoading(true);
   try {
     await signInWithEmailAndPassword(auth, email, pass);
@@ -189,7 +189,7 @@ async function doLogin() {
   }
 }
 window.doLogin = doLogin;
-
+ 
 function showErr(msg) {
   const el = document.getElementById('err-msg');
   el.textContent = msg;
@@ -200,7 +200,7 @@ function setLoading(on) {
   document.getElementById('btn-label').textContent = on ? 'Verificando...' : 'ACCEDER →';
   document.getElementById('btn-login').disabled    = on;
 }
-
+ 
 // Registrar Service Worker para PWA
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
