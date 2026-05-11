@@ -381,8 +381,13 @@ const addLog = async (msg,tipo='info',escuela='') => {
   try { await addDoc(collection(db,C.LOG),{msg,tipo,escuela,fecha:serverTimestamp()}); } catch {}
 };
 const getCfg = async () => {
-  try { const s=await getDoc(doc(db,C.CFG,'principal')); return s.exists()?s.data(){}; }
-  catch(e) { console.warn('getCfg',e); return {}; }
+  try {
+    const s = await getDoc(doc(db, C.CFG, 'principal'));
+    return s.exists() ? s.data() : {};
+  } catch (e) {
+    console.warn('getCfg', e);
+    return {};
+  }
 };
 const setCfg = async data => setDoc(doc(db,C.CFG,'principal'),data,{merge:true});
 
