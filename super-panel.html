@@ -430,7 +430,7 @@ const firebaseConfig = {
   messagingSenderId: "322169536252",
   appId:             "1:322169536252:web:21c0610d4e33d92fa8a179"
 };
-const ADMIN_EMAIL = "uriel.bacher@gmail.com"; // ← reemplazá con tu email
+const ADMIN_EMAIL = "uriel.bacher@gmail.com; // ← reemplazá con tu email
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
@@ -442,7 +442,12 @@ onAuthStateChanged(auth, async user => {
     window.location.href = 'index.html'; return;
   }
   document.getElementById('hdr-email').textContent = user.email;
-  await initApp();
+  try {
+    await initApp();
+  } catch(e) {
+    console.error('initApp error:', e);
+    // Mostrar igual aunque falle algo
+  }
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
 });
@@ -504,18 +509,21 @@ async function initApp() {
   document.getElementById('n-lic-inicio').value = hoy;
   const fin = new Date(); fin.setFullYear(fin.getFullYear()+1);
   document.getElementById('n-lic-fin').value = fin.toISOString().split('T')[0];
-  // Cargar config de GitHub
-  const cfg = await dbGetConfig();
-  if (cfg.ghToken)    document.getElementById('n-gh-token').value = cfg.ghToken;
-  if (cfg.ghUser)     document.getElementById('n-gh-user').value  = cfg.ghUser;
-  if (cfg.ghTemplate) document.getElementById('n-gh-template-repo').value = cfg.ghTemplate;
+  // Cargar config de GitHub (no bloquea si falla)
+  try {
+    const cfg = await dbGetConfig();
+    if (cfg.ghToken)    document.getElementById('n-gh-token').value = cfg.ghToken;
+    if (cfg.ghUser)     document.getElementById('n-gh-user').value  = cfg.ghUser;
+    if (cfg.ghTemplate) document.getElementById('n-gh-template-repo').value = cfg.ghTemplate;
+  } catch(e) { console.warn('Config no disponible:', e.message); }
   // Sync color pickers
   ['n-color1','n-color2','n-color3'].forEach(id => {
     document.getElementById(id).addEventListener('input', e => {
       document.getElementById(id+'-hex').value = e.target.value;
     });
   });
-  renderDashboard();
+  // Cargar dashboard (no bloquea si falla)
+  try { await renderDashboard(); } catch(e) { console.warn('Dashboard error:', e.message); }
 }
 
 // ══════════════════════════════════════
